@@ -35,7 +35,20 @@ python build_tool.py
    One grid point sits exactly on 2.5, where half-to-even rounding cuts 458,461
    documents.
 
-## Reproduce
+## Reproduce without the download
+
+Every figure in the article is computed from two frozen intermediates that
+`analyse_full.py` writes on its way through the corpus. Both are on the Zenodo
+record (they are too large for git), and `verify_frozen.py` recomputes all of it
+and checks each result against the published number:
+
+```
+python verify_frozen.py        # RESULT: PASS, or exits non-zero naming the mismatch
+```
+
+That takes about a minute and needs no downloads. What it does not cover is the
+read from the raw shards into those two files, the sampling and tokenisation step.
+For that, the full path:
 
 ```
 python download_random.py     # seeded manifest, then the 110 shards by exact path
