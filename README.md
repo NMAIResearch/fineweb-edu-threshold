@@ -3,7 +3,7 @@
 Three operational details in a published quality filter, measured across 84 million
 documents and 94 Common Crawl snapshots.
 
-**Paper (DOI):** [10.5281/zenodo.21740082](https://doi.org/10.5281/zenodo.21740082) · CC BY 4.0
+**Paper (DOI):** [10.5281/zenodo.21740081](https://doi.org/10.5281/zenodo.21740081) · CC BY 4.0
 
 **Interactive tool:** [Threshold Explorer](https://nmairesearch.github.io/fineweb-edu-threshold/)
 
