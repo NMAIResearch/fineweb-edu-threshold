@@ -1,6 +1,7 @@
 # What actually admits a document to FineWeb-Edu
 
-## Three operational details in a published quality filter, measured across 84 million documents and 94 crawls
+**Three operational details in a published quality filter, measured across 84 million documents and 94 crawls**
+NM AI Research · 1 August 2026 · [doi.org/10.5281/zenodo.21740082](https://doi.org/10.5281/zenodo.21740082)
 
 FineWeb-Edu is a filtered web corpus, built by scoring pages with a small classifier for
 "educational value" and keeping the ones that score highly enough. The documented rule is a
