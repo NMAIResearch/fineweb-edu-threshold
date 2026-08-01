@@ -5,8 +5,23 @@ documents and 94 Common Crawl snapshots.
 
 **Paper (DOI):** [10.5281/zenodo.21740082](https://doi.org/10.5281/zenodo.21740082) · CC BY 4.0
 
+**Interactive tool:** [Threshold Explorer](https://nmairesearch.github.io/fineweb-edu-threshold/)
+
 The article is `fineweb_edu_threshold.pdf` (source: `article_draft_v2.md`). This
 bundle lets a reader reproduce every figure without the author's cooperation.
+
+## The tool
+
+`index.html` is a threshold explorer over the frozen data: move the raw admission cut
+across the 233-point bfloat16 grid, switch the rounding rule to watch the 458,461-document
+tie cohort at 2.5 appear and disappear, and read the truncation trend across the crawl
+series. It is one self-contained file with the data embedded, no dependencies and no
+network calls, so it works from `file://` as well as from Pages. `build_tool.py`
+regenerates `score_grid.csv` from `full_scores.parquet` and re-injects all three tables:
+
+```
+python build_tool.py
+```
 
 ## What is measured
 
@@ -31,7 +46,9 @@ python redteam_checks.py       # the fixed-score truncation trend to 2025 and th
 
 `random_shard_manifest.json` pins the exact shards (seed 20260801, written before
 download so the selection cannot have followed the results). `by_dump.csv` is the
-per-snapshot output behind the trend figures.
+per-snapshot output behind the trend figures, `redteam_check_a.csv` the fixed-score
+version of the same trend, and `score_grid.csv` the whole 84-million-document score
+distribution collapsed onto the 233 values the classifier can represent.
 
 The quantisation result needs none of the downloads. Read `src/run_edu_bert.py` in
 `HuggingFaceFW/fineweb-edu-classifier`, then run one line of NumPy against any
