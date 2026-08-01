@@ -1,0 +1,552 @@
+{
+ "CC-MAIN-2013-20": {
+  "shard": "train-00034-of-00058",
+  "path": "data/CC-MAIN-2013-20/train-00034-of-00058.parquet",
+  "n_shards": 58
+ },
+ "CC-MAIN-2013-48": {
+  "shard": "train-00024-of-00058",
+  "path": "data/CC-MAIN-2013-48/train-00024-of-00058.parquet",
+  "n_shards": 58
+ },
+ "CC-MAIN-2014-10": {
+  "shard": "train-00014-of-00058",
+  "path": "data/CC-MAIN-2014-10/train-00014-of-00058.parquet",
+  "n_shards": 58
+ },
+ "CC-MAIN-2014-15": {
+  "shard": "train-00012-of-00054",
+  "path": "data/CC-MAIN-2014-15/train-00012-of-00054.parquet",
+  "n_shards": 54
+ },
+ "CC-MAIN-2014-23": {
+  "shard": "train-00024-of-00063",
+  "path": "data/CC-MAIN-2014-23/train-00024-of-00063.parquet",
+  "n_shards": 63
+ },
+ "CC-MAIN-2014-35": {
+  "shard": "train-00050-of-00058",
+  "path": "data/CC-MAIN-2014-35/train-00050-of-00058.parquet",
+  "n_shards": 58
+ },
+ "CC-MAIN-2014-41": {
+  "shard": "train-00001-of-00061",
+  "path": "data/CC-MAIN-2014-41/train-00001-of-00061.parquet",
+  "n_shards": 61
+ },
+ "CC-MAIN-2014-42": {
+  "shard": "train-00048-of-00056",
+  "path": "data/CC-MAIN-2014-42/train-00048-of-00056.parquet",
+  "n_shards": 56
+ },
+ "CC-MAIN-2014-49": {
+  "shard": "train-00024-of-00049",
+  "path": "data/CC-MAIN-2014-49/train-00024-of-00049.parquet",
+  "n_shards": 49
+ },
+ "CC-MAIN-2014-52": {
+  "shard": "train-00043-of-00059",
+  "path": "data/CC-MAIN-2014-52/train-00043-of-00059.parquet",
+  "n_shards": 59
+ },
+ "CC-MAIN-2015-06": {
+  "shard": "train-00025-of-00054",
+  "path": "data/CC-MAIN-2015-06/train-00025-of-00054.parquet",
+  "n_shards": 54
+ },
+ "CC-MAIN-2015-11": {
+  "shard": "train-00051-of-00055",
+  "path": "data/CC-MAIN-2015-11/train-00051-of-00055.parquet",
+  "n_shards": 55
+ },
+ "CC-MAIN-2015-14": {
+  "shard": "train-00017-of-00052",
+  "path": "data/CC-MAIN-2015-14/train-00017-of-00052.parquet",
+  "n_shards": 52
+ },
+ "CC-MAIN-2015-18": {
+  "shard": "train-00040-of-00059",
+  "path": "data/CC-MAIN-2015-18/train-00040-of-00059.parquet",
+  "n_shards": 59
+ },
+ "CC-MAIN-2015-22": {
+  "shard": "train-00016-of-00058",
+  "path": "data/CC-MAIN-2015-22/train-00016-of-00058.parquet",
+  "n_shards": 58
+ },
+ "CC-MAIN-2015-27": {
+  "shard": "train-00004-of-00052",
+  "path": "data/CC-MAIN-2015-27/train-00004-of-00052.parquet",
+  "n_shards": 52
+ },
+ "CC-MAIN-2015-32": {
+  "shard": "train-00052-of-00054",
+  "path": "data/CC-MAIN-2015-32/train-00052-of-00054.parquet",
+  "n_shards": 54
+ },
+ "CC-MAIN-2015-35": {
+  "shard": "train-00048-of-00055",
+  "path": "data/CC-MAIN-2015-35/train-00048-of-00055.parquet",
+  "n_shards": 55
+ },
+ "CC-MAIN-2015-40": {
+  "shard": "train-00016-of-00044",
+  "path": "data/CC-MAIN-2015-40/train-00016-of-00044.parquet",
+  "n_shards": 44
+ },
+ "CC-MAIN-2015-48": {
+  "shard": "train-00034-of-00054",
+  "path": "data/CC-MAIN-2015-48/train-00034-of-00054.parquet",
+  "n_shards": 54
+ },
+ "CC-MAIN-2016-07": {
+  "shard": "train-00042-of-00053",
+  "path": "data/CC-MAIN-2016-07/train-00042-of-00053.parquet",
+  "n_shards": 53
+ },
+ "CC-MAIN-2016-18": {
+  "shard": "train-00014-of-00046",
+  "path": "data/CC-MAIN-2016-18/train-00014-of-00046.parquet",
+  "n_shards": 46
+ },
+ "CC-MAIN-2016-22": {
+  "shard": "train-00037-of-00049",
+  "path": "data/CC-MAIN-2016-22/train-00037-of-00049.parquet",
+  "n_shards": 49
+ },
+ "CC-MAIN-2016-26": {
+  "shard": "train-00016-of-00040",
+  "path": "data/CC-MAIN-2016-26/train-00016-of-00040.parquet",
+  "n_shards": 40
+ },
+ "CC-MAIN-2016-30": {
+  "shard": "train-00046-of-00054",
+  "path": "data/CC-MAIN-2016-30/train-00046-of-00054.parquet",
+  "n_shards": 54
+ },
+ "CC-MAIN-2016-36": {
+  "shard": "train-00027-of-00053",
+  "path": "data/CC-MAIN-2016-36/train-00027-of-00053.parquet",
+  "n_shards": 53
+ },
+ "CC-MAIN-2016-40": {
+  "shard": "train-00030-of-00060",
+  "path": "data/CC-MAIN-2016-40/train-00030-of-00060.parquet",
+  "n_shards": 60
+ },
+ "CC-MAIN-2016-44": {
+  "shard": "train-00052-of-00070",
+  "path": "data/CC-MAIN-2016-44/train-00052-of-00070.parquet",
+  "n_shards": 70
+ },
+ "CC-MAIN-2016-50": {
+  "shard": "train-00034-of-00068",
+  "path": "data/CC-MAIN-2016-50/train-00034-of-00068.parquet",
+  "n_shards": 68
+ },
+ "CC-MAIN-2017-04": {
+  "shard": "train-00051-of-00072",
+  "path": "data/CC-MAIN-2017-04/train-00051-of-00072.parquet",
+  "n_shards": 72
+ },
+ "CC-MAIN-2017-09": {
+  "shard": "train-00000-of-00075",
+  "path": "data/CC-MAIN-2017-09/train-00000-of-00075.parquet",
+  "n_shards": 75
+ },
+ "CC-MAIN-2017-13": {
+  "shard": "train-00007-of-00089",
+  "path": "data/CC-MAIN-2017-13/train-00007-of-00089.parquet",
+  "n_shards": 89
+ },
+ "CC-MAIN-2017-17": {
+  "shard": "train-00003-of-00089",
+  "path": "data/CC-MAIN-2017-17/train-00003-of-00089.parquet",
+  "n_shards": 89
+ },
+ "CC-MAIN-2017-22": {
+  "shard": "train-00019-of-00066",
+  "path": "data/CC-MAIN-2017-22/train-00019-of-00066.parquet",
+  "n_shards": 66
+ },
+ "CC-MAIN-2017-26": {
+  "shard": "train-00014-of-00071",
+  "path": "data/CC-MAIN-2017-26/train-00014-of-00071.parquet",
+  "n_shards": 71
+ },
+ "CC-MAIN-2017-30": {
+  "shard": "train-00054-of-00066",
+  "path": "data/CC-MAIN-2017-30/train-00054-of-00066.parquet",
+  "n_shards": 66
+ },
+ "CC-MAIN-2017-34": {
+  "shard": "train-00038-of-00070",
+  "path": "data/CC-MAIN-2017-34/train-00038-of-00070.parquet",
+  "n_shards": 70
+ },
+ "CC-MAIN-2017-39": {
+  "shard": "train-00010-of-00066",
+  "path": "data/CC-MAIN-2017-39/train-00010-of-00066.parquet",
+  "n_shards": 66
+ },
+ "CC-MAIN-2017-43": {
+  "shard": "train-00066-of-00077",
+  "path": "data/CC-MAIN-2017-43/train-00066-of-00077.parquet",
+  "n_shards": 77
+ },
+ "CC-MAIN-2017-47": {
+  "shard": "train-00048-of-00068",
+  "path": "data/CC-MAIN-2017-47/train-00048-of-00068.parquet",
+  "n_shards": 68
+ },
+ "CC-MAIN-2017-51": {
+  "shard": "train-00004-of-00063",
+  "path": "data/CC-MAIN-2017-51/train-00004-of-00063.parquet",
+  "n_shards": 63
+ },
+ "CC-MAIN-2018-05": {
+  "shard": "train-00061-of-00073",
+  "path": "data/CC-MAIN-2018-05/train-00061-of-00073.parquet",
+  "n_shards": 73
+ },
+ "CC-MAIN-2018-09": {
+  "shard": "train-00020-of-00071",
+  "path": "data/CC-MAIN-2018-09/train-00020-of-00071.parquet",
+  "n_shards": 71
+ },
+ "CC-MAIN-2018-13": {
+  "shard": "train-00043-of-00068",
+  "path": "data/CC-MAIN-2018-13/train-00043-of-00068.parquet",
+  "n_shards": 68
+ },
+ "CC-MAIN-2018-17": {
+  "shard": "train-00042-of-00064",
+  "path": "data/CC-MAIN-2018-17/train-00042-of-00064.parquet",
+  "n_shards": 64
+ },
+ "CC-MAIN-2018-22": {
+  "shard": "train-00047-of-00058",
+  "path": "data/CC-MAIN-2018-22/train-00047-of-00058.parquet",
+  "n_shards": 58
+ },
+ "CC-MAIN-2018-26": {
+  "shard": "train-00054-of-00070",
+  "path": "data/CC-MAIN-2018-26/train-00054-of-00070.parquet",
+  "n_shards": 70
+ },
+ "CC-MAIN-2018-30": {
+  "shard": "train-00019-of-00073",
+  "path": "data/CC-MAIN-2018-30/train-00019-of-00073.parquet",
+  "n_shards": 73
+ },
+ "CC-MAIN-2018-34": {
+  "shard": "train-00008-of-00061",
+  "path": "data/CC-MAIN-2018-34/train-00008-of-00061.parquet",
+  "n_shards": 61
+ },
+ "CC-MAIN-2018-39": {
+  "shard": "train-00012-of-00065",
+  "path": "data/CC-MAIN-2018-39/train-00012-of-00065.parquet",
+  "n_shards": 65
+ },
+ "CC-MAIN-2018-43": {
+  "shard": "train-00006-of-00071",
+  "path": "data/CC-MAIN-2018-43/train-00006-of-00071.parquet",
+  "n_shards": 71
+ },
+ "CC-MAIN-2018-47": {
+  "shard": "train-00035-of-00065",
+  "path": "data/CC-MAIN-2018-47/train-00035-of-00065.parquet",
+  "n_shards": 65
+ },
+ "CC-MAIN-2018-51": {
+  "shard": "train-00059-of-00074",
+  "path": "data/CC-MAIN-2018-51/train-00059-of-00074.parquet",
+  "n_shards": 74
+ },
+ "CC-MAIN-2019-04": {
+  "shard": "train-00054-of-00066",
+  "path": "data/CC-MAIN-2019-04/train-00054-of-00066.parquet",
+  "n_shards": 66
+ },
+ "CC-MAIN-2019-09": {
+  "shard": "train-00049-of-00072",
+  "path": "data/CC-MAIN-2019-09/train-00049-of-00072.parquet",
+  "n_shards": 72
+ },
+ "CC-MAIN-2019-13": {
+  "shard": "train-00063-of-00066",
+  "path": "data/CC-MAIN-2019-13/train-00063-of-00066.parquet",
+  "n_shards": 66
+ },
+ "CC-MAIN-2019-18": {
+  "shard": "train-00010-of-00067",
+  "path": "data/CC-MAIN-2019-18/train-00010-of-00067.parquet",
+  "n_shards": 67
+ },
+ "CC-MAIN-2019-22": {
+  "shard": "train-00046-of-00068",
+  "path": "data/CC-MAIN-2019-22/train-00046-of-00068.parquet",
+  "n_shards": 68
+ },
+ "CC-MAIN-2019-26": {
+  "shard": "train-00015-of-00065",
+  "path": "data/CC-MAIN-2019-26/train-00015-of-00065.parquet",
+  "n_shards": 65
+ },
+ "CC-MAIN-2019-30": {
+  "shard": "train-00039-of-00065",
+  "path": "data/CC-MAIN-2019-30/train-00039-of-00065.parquet",
+  "n_shards": 65
+ },
+ "CC-MAIN-2019-35": {
+  "shard": "train-00060-of-00071",
+  "path": "data/CC-MAIN-2019-35/train-00060-of-00071.parquet",
+  "n_shards": 71
+ },
+ "CC-MAIN-2019-39": {
+  "shard": "train-00003-of-00062",
+  "path": "data/CC-MAIN-2019-39/train-00003-of-00062.parquet",
+  "n_shards": 62
+ },
+ "CC-MAIN-2019-43": {
+  "shard": "train-00030-of-00066",
+  "path": "data/CC-MAIN-2019-43/train-00030-of-00066.parquet",
+  "n_shards": 66
+ },
+ "CC-MAIN-2019-47": {
+  "shard": "train-00027-of-00063",
+  "path": "data/CC-MAIN-2019-47/train-00027-of-00063.parquet",
+  "n_shards": 63
+ },
+ "CC-MAIN-2019-51": {
+  "shard": "train-00023-of-00057",
+  "path": "data/CC-MAIN-2019-51/train-00023-of-00057.parquet",
+  "n_shards": 57
+ },
+ "CC-MAIN-2020-05": {
+  "shard": "train-00011-of-00078",
+  "path": "data/CC-MAIN-2020-05/train-00011-of-00078.parquet",
+  "n_shards": 78
+ },
+ "CC-MAIN-2020-10": {
+  "shard": "train-00004-of-00059",
+  "path": "data/CC-MAIN-2020-10/train-00004-of-00059.parquet",
+  "n_shards": 59
+ },
+ "CC-MAIN-2020-16": {
+  "shard": "train-00060-of-00073",
+  "path": "data/CC-MAIN-2020-16/train-00060-of-00073.parquet",
+  "n_shards": 73
+ },
+ "CC-MAIN-2020-24": {
+  "shard": "train-00012-of-00063",
+  "path": "data/CC-MAIN-2020-24/train-00012-of-00063.parquet",
+  "n_shards": 63
+ },
+ "CC-MAIN-2020-29": {
+  "shard": "train-00022-of-00079",
+  "path": "data/CC-MAIN-2020-29/train-00022-of-00079.parquet",
+  "n_shards": 79
+ },
+ "CC-MAIN-2020-34": {
+  "shard": "train-00021-of-00062",
+  "path": "data/CC-MAIN-2020-34/train-00021-of-00062.parquet",
+  "n_shards": 62
+ },
+ "CC-MAIN-2020-40": {
+  "shard": "train-00024-of-00087",
+  "path": "data/CC-MAIN-2020-40/train-00024-of-00087.parquet",
+  "n_shards": 87
+ },
+ "CC-MAIN-2020-45": {
+  "shard": "train-00011-of-00068",
+  "path": "data/CC-MAIN-2020-45/train-00011-of-00068.parquet",
+  "n_shards": 68
+ },
+ "CC-MAIN-2020-50": {
+  "shard": "train-00017-of-00066",
+  "path": "data/CC-MAIN-2020-50/train-00017-of-00066.parquet",
+  "n_shards": 66
+ },
+ "CC-MAIN-2021-04": {
+  "shard": "train-00062-of-00089",
+  "path": "data/CC-MAIN-2021-04/train-00062-of-00089.parquet",
+  "n_shards": 89
+ },
+ "CC-MAIN-2021-10": {
+  "shard": "train-00007-of-00073",
+  "path": "data/CC-MAIN-2021-10/train-00007-of-00073.parquet",
+  "n_shards": 73
+ },
+ "CC-MAIN-2021-17": {
+  "shard": "train-00073-of-00090",
+  "path": "data/CC-MAIN-2021-17/train-00073-of-00090.parquet",
+  "n_shards": 90
+ },
+ "CC-MAIN-2021-21": {
+  "shard": "train-00059-of-00073",
+  "path": "data/CC-MAIN-2021-21/train-00059-of-00073.parquet",
+  "n_shards": 73
+ },
+ "CC-MAIN-2021-25": {
+  "shard": "train-00005-of-00066",
+  "path": "data/CC-MAIN-2021-25/train-00005-of-00066.parquet",
+  "n_shards": 66
+ },
+ "CC-MAIN-2021-31": {
+  "shard": "train-00079-of-00096",
+  "path": "data/CC-MAIN-2021-31/train-00079-of-00096.parquet",
+  "n_shards": 96
+ },
+ "CC-MAIN-2021-39": {
+  "shard": "train-00026-of-00084",
+  "path": "data/CC-MAIN-2021-39/train-00026-of-00084.parquet",
+  "n_shards": 84
+ },
+ "CC-MAIN-2021-43": {
+  "shard": "train-00084-of-00097",
+  "path": "data/CC-MAIN-2021-43/train-00084-of-00097.parquet",
+  "n_shards": 97
+ },
+ "CC-MAIN-2021-49": {
+  "shard": "train-00038-of-00065",
+  "path": "data/CC-MAIN-2021-49/train-00038-of-00065.parquet",
+  "n_shards": 65
+ },
+ "CC-MAIN-2022-05": {
+  "shard": "train-00044-of-00084",
+  "path": "data/CC-MAIN-2022-05/train-00044-of-00084.parquet",
+  "n_shards": 84
+ },
+ "CC-MAIN-2022-21": {
+  "shard": "train-00048-of-00105",
+  "path": "data/CC-MAIN-2022-21/train-00048-of-00105.parquet",
+  "n_shards": 105
+ },
+ "CC-MAIN-2022-27": {
+  "shard": "train-00013-of-00095",
+  "path": "data/CC-MAIN-2022-27/train-00013-of-00095.parquet",
+  "n_shards": 95
+ },
+ "CC-MAIN-2022-33": {
+  "shard": "train-00025-of-00070",
+  "path": "data/CC-MAIN-2022-33/train-00025-of-00070.parquet",
+  "n_shards": 70
+ },
+ "CC-MAIN-2022-40": {
+  "shard": "train-00087-of-00100",
+  "path": "data/CC-MAIN-2022-40/train-00087-of-00100.parquet",
+  "n_shards": 100
+ },
+ "CC-MAIN-2022-49": {
+  "shard": "train-00093-of-00105",
+  "path": "data/CC-MAIN-2022-49/train-00093-of-00105.parquet",
+  "n_shards": 105
+ },
+ "CC-MAIN-2023-06": {
+  "shard": "train-00098-of-00103",
+  "path": "data/CC-MAIN-2023-06/train-00098-of-00103.parquet",
+  "n_shards": 103
+ },
+ "CC-MAIN-2023-14": {
+  "shard": "train-00067-of-00102",
+  "path": "data/CC-MAIN-2023-14/train-00067-of-00102.parquet",
+  "n_shards": 102
+ },
+ "CC-MAIN-2023-23": {
+  "shard": "train-00036-of-00110",
+  "path": "data/CC-MAIN-2023-23/train-00036-of-00110.parquet",
+  "n_shards": 110
+ },
+ "CC-MAIN-2023-40": {
+  "shard": "train-00067-of-00117",
+  "path": "data/CC-MAIN-2023-40/train-00067-of-00117.parquet",
+  "n_shards": 117
+ },
+ "CC-MAIN-2023-50": {
+  "shard": "train-00088-of-00113",
+  "path": "data/CC-MAIN-2023-50/train-00088-of-00113.parquet",
+  "n_shards": 113
+ },
+ "CC-MAIN-2024-10": {
+  "shard": "001_00013",
+  "path": "data/CC-MAIN-2024-10/001_00013.parquet",
+  "n_shards": 128
+ },
+ "CC-MAIN-2024-18": {
+  "shard": "002_00001",
+  "path": "data/CC-MAIN-2024-18/002_00001.parquet",
+  "n_shards": 128
+ },
+ "CC-MAIN-2024-22": {
+  "shard": "001_00021",
+  "path": "data/CC-MAIN-2024-22/001_00021.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2024-26": {
+  "shard": "000_00027",
+  "path": "data/CC-MAIN-2024-26/000_00027.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2024-30": {
+  "shard": "000_00044",
+  "path": "data/CC-MAIN-2024-30/000_00044.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2024-33": {
+  "shard": "000_00009",
+  "path": "data/CC-MAIN-2024-33/000_00009.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2024-38": {
+  "shard": "001_00008",
+  "path": "data/CC-MAIN-2024-38/001_00008.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2024-42": {
+  "shard": "001_00042",
+  "path": "data/CC-MAIN-2024-42/001_00042.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2024-46": {
+  "shard": "002_00006",
+  "path": "data/CC-MAIN-2024-46/002_00006.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2024-51": {
+  "shard": "001_00035",
+  "path": "data/CC-MAIN-2024-51/001_00035.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2025-05": {
+  "shard": "003_00004",
+  "path": "data/CC-MAIN-2025-05/003_00004.parquet",
+  "n_shards": 128
+ },
+ "CC-MAIN-2025-08": {
+  "shard": "001_00039",
+  "path": "data/CC-MAIN-2025-08/001_00039.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2025-13": {
+  "shard": "001_00014",
+  "path": "data/CC-MAIN-2025-13/001_00014.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2025-18": {
+  "shard": "000_00000",
+  "path": "data/CC-MAIN-2025-18/000_00000.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2025-21": {
+  "shard": "000_00031",
+  "path": "data/CC-MAIN-2025-21/000_00031.parquet",
+  "n_shards": 114
+ },
+ "CC-MAIN-2025-26": {
+  "shard": "000_00009",
+  "path": "data/CC-MAIN-2025-26/000_00009.parquet",
+  "n_shards": 114
+ }
+}
