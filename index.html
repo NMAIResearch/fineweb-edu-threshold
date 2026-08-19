@@ -1,25 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FineWeb-Edu Threshold Explorer — interactive</title>
+<title>FineWeb-Edu Threshold Explorer (interactive)</title>
 <meta name="description" content="Move the raw admission cut across the classifier's own bfloat16 score grid and watch what enters FineWeb-Edu. Interactive front-end over the frozen 84-million-document audit dataset.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="FineWeb-Edu Threshold Explorer">
-<meta property="og:description" content="What actually admits a document to FineWeb-Edu: the raw cut, the rounding rule, and the classifier's reading limit, over 84 million scored documents.">
-<meta property="og:url" content="https://nmairesearch.github.io/fineweb-edu-threshold/">
 <style>
-  :root{
-    --navy:#1a365d; --slate:#4a5568; --body:#2d3748; --alt:#f7fafc;
-    --line:#e2e8f0; --accent:#2b6cb0; --good:#276749; --goodbg:#f0fff4;
-    --warn:#975a16; --warnbg:#fffaf0; --bad:#9b2c2c; --badbg:#fff5f5;
-    --cut:#cbd5e0; --band:#7f9cc0; --keep:#1a365d; --tie:#9b2c2c;
+  :root {
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+  html[data-theme="light"] {
+    --navy: #1a365d;
+    --slate: #4a5568;
+    --body: #2d3748;
+    --alt: #f1f5f9;
+    --line: #cbd5e1;
+    --accent: #2563eb;
+    --good: #15803d;
+    --goodbg: #f0fdf4;
+    --warn: #b45309;
+    --warnbg: #fffbeb;
+    --bad: #b91c1c;
+    --badbg: #fef2f2;
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --cut: #cbd5e0;
+    --band: #7f9cc0;
+    --keep: #1a365d;
+    --tie: #b91c1c;
+    --shadow: 0 1px 2px rgba(26,54,93,.06);
+  }
+  html[data-theme="dark"] {
+    --navy: #ffffff;
+    --slate: #94a3b8;
+    --body: #f1f5f9;
+    --alt: #162032;
+    --line: #1e293b;
+    --accent: #38bdf8;
+    --good: #34d399;
+    --goodbg: rgba(52,211,153,0.15);
+    --warn: #f59e0b;
+    --warnbg: rgba(245,158,11,0.15);
+    --bad: #f87171;
+    --badbg: rgba(248,113,113,0.15);
+    --bg: #0b0f19;
+    --bg-card: #111827;
+    --cut: #334155;
+    --band: #38bdf8;
+    --keep: #60a5fa;
+    --tie: #f87171;
+    --shadow: 0 1px 3px rgba(0,0,0,0.5);
   }
   *{box-sizing:border-box}
   body{font-family:Arial,Helvetica,sans-serif;color:var(--body);margin:0;
-    background:#fff;line-height:1.45;-webkit-font-smoothing:antialiased}
+    background:var(--bg);line-height:1.45;-webkit-font-smoothing:antialiased;transition:background .15s, color .15s}
   .wrap{max-width:1080px;margin:0 auto;padding:28px 22px 60px}
+  .header-bar{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:gap;gap:12px}
+  .theme-toggle-btn{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:4px;border:1px solid var(--line);background:var(--bg-card);color:var(--body);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+  .theme-toggle-btn:hover{border-color:var(--accent);color:var(--accent)}
   h1{color:var(--navy);font-size:26px;margin:0 0 4px}
   .sub{color:var(--slate);font-size:14px;margin:0 0 2px;max-width:820px}
   .stamp{color:var(--slate);font-size:12.5px;margin:8px 0 0}
@@ -34,31 +72,31 @@
     border:1px solid var(--line);border-radius:8px}
   .ctl label{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;
     color:var(--slate);font-weight:bold;margin-bottom:7px}
-  .seg{display:inline-flex;border:1px solid var(--navy);border-radius:6px;overflow:hidden}
-  .seg button{appearance:none;border:0;background:#fff;color:var(--navy);
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .seg button{appearance:none;border:0;background:var(--bg-card);color:var(--body);
     padding:8px 13px;font-size:13px;cursor:pointer;font-family:inherit}
-  .seg button+button{border-left:1px solid var(--navy)}
-  .seg button.on{background:var(--navy);color:#fff;font-weight:bold}
+  .seg button+button{border-left:1px solid var(--line)}
+  .seg button.on{background:var(--navy);color:var(--bg);font-weight:bold}
   .slid{flex:1 1 360px;min-width:280px}
-  .slid input[type=range]{width:100%;margin:0;accent-color:var(--navy)}
+  .slid input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
   .readcut{display:flex;align-items:baseline;gap:10px;margin-bottom:2px}
   .readcut b{color:var(--navy);font-size:21px;font-variant-numeric:tabular-nums}
   .readcut span{font-size:12.5px;color:var(--slate)}
   .snap{margin-top:8px}
   .snap button{appearance:none;font-family:inherit;font-size:12px;padding:5px 10px;
-    border:1px solid var(--line);background:#fff;color:var(--slate);border-radius:6px;
+    border:1px solid var(--line);background:var(--bg-card);color:var(--body);border-radius:6px;
     cursor:pointer;margin-right:7px}
   .snap button:hover{border-color:var(--accent);color:var(--accent)}
 
   .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0 0}
-  .tile{border:1px solid var(--line);border-left:4px solid var(--navy);border-radius:8px;padding:12px 15px}
+  .tile{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:12px 15px;background:var(--bg-card)}
   .tile b{display:block;color:var(--navy);font-size:18px;line-height:1.2;font-variant-numeric:tabular-nums}
   .tile span{font-size:12.5px;color:var(--slate);display:block;margin-top:3px}
   .tile em{font-style:normal;color:var(--body);font-size:12.5px;display:block;margin-top:5px;
     font-variant-numeric:tabular-nums}
 
-  .spotlight{margin:14px 0 6px;padding:12px 16px;border-left:4px solid var(--navy);
-    background:#fbfdff;font-size:14px;color:var(--body)}
+  .spotlight{margin:14px 0 6px;padding:12px 16px;border-left:4px solid var(--accent);
+    background:var(--bg-card);border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:0 6px 6px 0;font-size:14px;color:var(--body)}
   .spotlight b{color:var(--navy);font-variant-numeric:tabular-nums}
   .spotlight .tiny{display:block;margin-top:7px;font-size:12.5px;color:var(--slate)}
   .delta{color:var(--bad);font-weight:bold}
@@ -75,12 +113,12 @@
 
   pre.code{background:var(--alt);border:1px solid var(--line);border-radius:6px;
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;
-    padding:12px 14px;overflow-x:auto;margin:12px 0 10px;line-height:1.55}
-  pre.out{background:#fff;border:1px dashed #cbd5e0;color:var(--body);white-space:pre-wrap}
+    padding:12px 14px;overflow-x:auto;margin:12px 0 10px;line-height:1.55;color:var(--body)}
+  pre.out{background:var(--bg-card);border:1px dashed var(--line);color:var(--body);white-space:pre-wrap}
   pre.out .t{color:var(--good);font-weight:bold}
   pre.out .f{color:var(--bad);font-weight:bold}
   button.run{appearance:none;font-family:inherit;font-size:13.5px;font-weight:bold;
-    padding:9px 15px;border:1px solid var(--navy);background:var(--navy);color:#fff;
+    padding:9px 15px;border:1px solid var(--navy);background:var(--navy);color:var(--bg);
     border-radius:6px;cursor:pointer}
   button.run:hover{background:#254b7a}
 
@@ -99,9 +137,17 @@
 </head>
 <body>
 <div class="wrap">
-
-  <h1>The FineWeb-Edu Threshold Explorer</h1>
-  <p class="sub">The dataset card says to keep documents scoring 3 or more. That number is a rounded integer, the rounding is half-to-even, and the score it rounds was produced in bfloat16 on at most 510 tokens of text. Move the cut and watch what that costs.</p>
+  <div class="header-bar">
+    <div>
+      <p style="margin:0 0 10px;font-size:13px"><a href="https://nmairesearch.github.io/" style="color:var(--accent);text-decoration:none">&larr; NM AI Research · research portfolio</a></p>
+      <h1>The FineWeb-Edu Threshold Explorer</h1>
+      <p class="sub">The dataset card says to keep documents scoring 3 or more. That number is a rounded integer, the rounding is half-to-even, and the score it rounds was produced in bfloat16 on at most 510 tokens of text. Move the cut and watch what that costs.</p>
+    </div>
+    <button id="themeToggle" class="theme-toggle-btn" title="Toggle Light/Dark Theme">
+      <span id="themeIcon">◑</span>
+      <span id="themeLabel">THEME: LIGHT</span>
+    </button>
+  </div>
   <p class="stamp">Interactive front-end over the frozen v1.0 audit dataset: 84,005,795 documents, 94 Common Crawl snapshots, 233 distinct score values &middot; paper: <a href="https://doi.org/10.5281/zenodo.21740081" target="_blank" rel="noopener">DOI 10.5281/zenodo.21740081</a> &middot; <a href="https://github.com/NMAIResearch/fineweb-edu-threshold" target="_blank" rel="noopener">code &amp; data</a> &middot; NM AI Research, ORCID <a href="https://orcid.org/0009-0003-4213-7769" target="_blank" rel="noopener">0009-0003-4213-7769</a> &middot; CC BY 4.0</p>
 
   <h2>1. Move the cut</h2>
@@ -970,6 +1016,29 @@ document.querySelectorAll(".snap button").forEach(b => b.addEventListener("click
 drawAll();
 renderTrend();
 addEventListener("resize", () => { renderDist(); renderTrend(); });
+
+(function(){
+  var html = document.documentElement;
+  var btn = document.getElementById('themeToggle');
+  var lbl = document.getElementById('themeLabel');
+  var ico = document.getElementById('themeIcon');
+  function apply(theme){
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('nmai-theme', theme);
+    if(lbl && ico){
+      if(theme === 'dark'){ lbl.textContent = 'THEME: DARK'; ico.textContent = '◐'; }
+      else { lbl.textContent = 'THEME: LIGHT'; ico.textContent = '◑'; }
+    }
+  }
+  var saved = localStorage.getItem('nmai-theme') || 'light';
+  apply(saved);
+  if(btn){
+    btn.addEventListener('click', function(){
+      var curr = html.getAttribute('data-theme') || 'light';
+      apply(curr === 'dark' ? 'light' : 'dark');
+    });
+  }
+})();
 </script>
 </body>
 </html>
