@@ -18,6 +18,8 @@
     --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
   html[data-theme="light"] {
+    --fill: #1a365d;
+    --fill-fg: #f8fafc;
     --navy: #1a365d;
     --slate: #4a5568;
     --body: #2d3748;
@@ -39,6 +41,8 @@
     --shadow: 0 1px 2px rgba(26,54,93,.06);
   }
   html[data-theme="dark"] {
+    --fill: #1e293b;
+    --fill-fg: #f1f5f9;
     --navy: #ffffff;
     --slate: #94a3b8;
     --body: #f1f5f9;
@@ -89,7 +93,8 @@
   .seg button{appearance:none;border:0;background:var(--bg-card);color:var(--body);
     padding:8px 13px;font-size:13px;cursor:pointer;font-family:inherit}
   .seg button+button{border-left:1px solid var(--line)}
-  .seg button.on{background:var(--navy);color:var(--bg);font-weight:bold}
+  input,select,textarea{background:var(--bg-card);color:var(--body);border:1px solid var(--line)}
+  .seg button.on{background:var(--fill);color:var(--fill-fg);font-weight:bold}
   .slid{flex:1 1 360px;min-width:280px}
   .slid input[type=range]{width:100%;margin:0;accent-color:var(--accent)}
   .readcut{display:flex;align-items:baseline;gap:10px;margin-bottom:2px}
@@ -131,7 +136,7 @@
   pre.out .t{color:var(--good);font-weight:bold}
   pre.out .f{color:var(--bad);font-weight:bold}
   button.run{appearance:none;font-family:inherit;font-size:13.5px;font-weight:bold;
-    padding:9px 15px;border:1px solid var(--navy);background:var(--navy);color:var(--bg);
+    padding:9px 15px;border:1px solid var(--navy);background:var(--fill);color:var(--fill-fg);
     border-radius:6px;cursor:pointer}
   button.run:hover{background:#254b7a}
 
