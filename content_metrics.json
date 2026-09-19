@@ -1,0 +1,65 @@
+{
+  "purpose": "Authoritative content-only metrics derived from unchanged frozen encoded lengths",
+  "input_sha256": "983def5d5a306dd6777f3be13136ec135a73c89bd120cd96058ff05b7e56aed2",
+  "counting": "bert_tokens includes CLS and SEP; subtract two before applying the content budget",
+  "content_budget": 510,
+  "populations": {
+    "all": {
+      "n": 188000,
+      "truncated": 101357,
+      "old_truncated": 101714,
+      "content_tokens": 170394619,
+      "visible_content_tokens": 77482545,
+      "truncated_pct": 53.91329787234043,
+      "visible_pct": 45.472413069569996,
+      "median_content_tokens": 555.0
+    },
+    "retained": {
+      "n": 40431,
+      "truncated": 23445,
+      "old_truncated": 23516,
+      "content_tokens": 40802906,
+      "visible_content_tokens": 17087287,
+      "truncated_pct": 57.98768271870595,
+      "visible_pct": 41.87762263795623,
+      "median_content_tokens": 605.0
+    },
+    "rounded_in": {
+      "n": 23081,
+      "truncated": 13064,
+      "old_truncated": 13109,
+      "content_tokens": 22711107,
+      "visible_content_tokens": 9649650,
+      "truncated_pct": 56.6006672154586,
+      "visible_pct": 42.488681859497206,
+      "median_content_tokens": 591.0
+    },
+    "above": {
+      "n": 17350,
+      "truncated": 10381,
+      "old_truncated": 10407,
+      "content_tokens": 18091799,
+      "visible_content_tokens": 7437637,
+      "truncated_pct": 59.83285302593659,
+      "visible_pct": 41.110544064744474,
+      "median_content_tokens": 623.0
+    },
+    "tie": {
+      "n": 998,
+      "truncated": 561,
+      "old_truncated": 563,
+      "content_tokens": 896312,
+      "visible_content_tokens": 411992,
+      "truncated_pct": 56.212424849699396,
+      "visible_pct": 45.96524424530743,
+      "median_content_tokens": 581.5
+    }
+  },
+  "trend": {
+    "n_dumps": 94,
+    "first_pct": 49.0,
+    "last_pct": 57.85,
+    "pearson_year": 0.8496383913803628
+  },
+  "content_gpt2_median_ratio": 0.9739046591057036
+}

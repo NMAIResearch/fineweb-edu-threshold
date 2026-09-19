@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Regenerate the data blocks embedded in index.html, the threshold explorer.
 
-The page carries its own data so it works offline and cannot drift from the record.
+The page carries its own corrected data and works offline.
 Three small tables go in, between the markers in the <script> block:
 
   GRID    score_grid.csv        the 233-point bfloat16 grid with document and token
                                 counts and the shipped int_score for each value
-  DUMPS   by_dump.csv           per-snapshot rounded-in and truncation shares, 94 dumps
-  FIXED   redteam_check_a.csv   truncation among documents scoring exactly 2.0, 107 dumps
+  DUMPS   corrected_by_dump.csv content-only truncation, joined to by_dump.csv scores
+  METRICS content_metrics.json  corrected retained-document numerators and denominators
+
+The historical fixed-score extension is not plotted until raw-text recalculation.
 
 score_grid.csv is itself derived from full_scores.parquet (written by analyse_full.py).
 It is regenerated here when the parquet is present, and read from disk otherwise, so a
@@ -18,6 +20,8 @@ Run:  .venv/bin/python build_tool.py
 import os
 import re
 import sys
+import json
+from pathlib import Path
 
 import pandas as pd
 
@@ -52,23 +56,30 @@ grid = "score,docs,tokens,int_score\n" + "\n".join(
     f"{float(r.score)!r},{r.docs},{r.tokens},{int(r.int_score)}" for r in g.itertuples())
 
 # ---- per-snapshot series ------------------------------------------------------
-d = pd.read_csv(p("by_dump.csv"))
-dumps = "dump,docs,rounded_in_pct,trunc_pct\n" + "\n".join(
-    f"{r.dump},{r.docs},{r.rounded_in_pct:.3f},{r.trunc_pct:.2f}" for r in d.itertuples())
-
-a = pd.read_csv(p("redteam_check_a.csv"))
-fixed = "dump,year,trunc_pct,median_tok,partitioned\n" + "\n".join(
-    f"{r.dump},{r.year},{r.trunc_pct:.4f},{r.median_tok:g},{r.partitioned}"
-    for r in a.itertuples())
+d = pd.read_csv(p("by_dump.csv"))[["dump", "docs", "rounded_in_pct"]]
+corrected = pd.read_csv(p("corrected_by_dump.csv"))
+assert set(d.dump) == set(corrected.dump), "corrected snapshot coverage differs"
+d = d.merge(corrected, on="dump", validate="one_to_one").sort_values("dump")
+assert ((d.truncated / d.n_tok * 100 - d.trunc_pct).abs() < 1e-9).all()
+dumps = "dump,docs,rounded_in_pct,n_tok,truncated,trunc_pct\n" + "\n".join(
+    f"{r.dump},{r.docs},{r.rounded_in_pct:.3f},{r.n_tok},{r.truncated},{r.trunc_pct:.2f}"
+    for r in d.itertuples())
+metrics = json.loads(Path(p("content_metrics.json")).read_text())
+assert metrics["counting"].startswith("bert_tokens includes CLS and SEP")
+assert metrics["populations"]["all"]["n"] == int(d.n_tok.sum())
+assert metrics["populations"]["all"]["truncated"] == int(d.truncated.sum())
 
 # ---- inject -------------------------------------------------------------------
-html = open(p("index.html")).read()
-blocks = {"GRID": ("GRID_CSV", grid), "DUMPS": ("DUMP_CSV", dumps), "FIXED": ("FIXED_CSV", fixed)}
+html = Path(p("index.html")).read_text()
+blocks = {"GRID": ("GRID_CSV", grid), "DUMPS": ("DUMP_CSV", dumps)}
 for tag, (var, body) in blocks.items():
     pat = re.compile(rf"(/\* {tag}-START \*/\n).*?(\n/\* {tag}-END \*/)", re.S)
-    assert pat.search(html), f"marker pair {tag} not found in index.html"
+    assert len(pat.findall(html)) == 1, f"unique marker pair {tag} not found in index.html"
     html = pat.sub(lambda m: m.group(1) + f"const {var} = `{body}`;" + m.group(2), html)
 
-open(p("index.html"), "w").write(html)
-print(f"wrote index.html: {len(g)} grid points, {len(d)} sampled dumps, {len(a)} fixed-score dumps, "
+pat = re.compile(r"(/\* METRICS-START \*/\n).*?(\n/\* METRICS-END \*/)", re.S)
+assert len(pat.findall(html)) == 1, "unique METRICS marker pair not found"
+html = pat.sub(lambda m: m.group(1) + "const METRICS = " + json.dumps(metrics) + ";" + m.group(2), html)
+Path(p("index.html")).write_text(html)
+print(f"wrote index.html: {len(g)} grid points, {len(d)} corrected sampled dumps, "
       f"{len(html)/1024:.0f} KB")

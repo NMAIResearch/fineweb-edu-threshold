@@ -166,10 +166,12 @@
       <span id="themeLabel">THEME: LIGHT</span>
     </button>
   </div>
-  <p class="stamp">Interactive front-end over the frozen v1.0 audit dataset: 84,005,795 documents, 94 Common Crawl snapshots, 233 distinct score values &middot; paper: <a href="https://doi.org/10.5281/zenodo.21740081" target="_blank" rel="noopener">DOI 10.5281/zenodo.21740081</a> &middot; <a href="https://github.com/NMAIResearch/fineweb-edu-threshold" target="_blank" rel="noopener">code &amp; data</a> &middot; NM AI Research, ORCID <a href="https://orcid.org/0009-0003-4213-7769" target="_blank" rel="noopener">0009-0003-4213-7769</a> &middot; CC BY 4.0</p>
+  <p class="stamp">Corrected content-token measurements over the frozen audit dataset: 84,005,795 documents, 94 Common Crawl snapshots, 233 distinct score values &middot; paper: <a href="https://doi.org/10.5281/zenodo.21740081" target="_blank" rel="noopener">DOI 10.5281/zenodo.21740081</a> &middot; <a href="https://github.com/NMAIResearch/fineweb-edu-threshold" target="_blank" rel="noopener">code &amp; data</a> &middot; NM AI Research, ORCID <a href="https://orcid.org/0009-0003-4213-7769" target="_blank" rel="noopener">0009-0003-4213-7769</a> &middot; CC BY 4.0</p>
+
+  <p class="spotlight"><b>Correction notice.</b> The truncation series below excludes the CLS and SEP special tokens. The linked DOI and PDF remain the historical release. The separate fixed-score extension is retained in the repository as historical data and is unavailable here pending a raw-text recalculation. See <a href="CORRECTIONS.md">correction details</a>.</p>
 
   <h2>1. Move the cut</h2>
-  <p class="intro">The slider steps through every score that occurs in the sample, and there are only 233 of them, with nothing in between, because the model ran in bfloat16. The shipped filter admits a document when its rounded score reaches 3, which on this grid means a raw score strictly above 2.5. The rounding rule changes the answer at one place only: documents sitting exactly on the cut, which matters at 2.5 and 4.5 and nowhere else.</p>
+  <p class="intro">The slider steps through every score that occurs in the sample, with 233 distinct values observed in this sample, consistent with bfloat16 output quantisation. The shipped filter admits a document when its rounded score reaches 3, which on this grid means a raw score strictly above 2.5. The rounding rule changes the answer at one place only: documents sitting exactly on the cut, which matters at 2.5 and 4.5 and nowhere else.</p>
 
   <div class="controls">
     <div class="ctl slid">
@@ -222,7 +224,7 @@
     </div>
     <svg id="dist" viewBox="0 0 960 300" role="img" aria-label="Distribution of documents across the 233 bfloat16 score values, with the admission cut marked"></svg>
     <p class="hover" id="hov">Hover a bar for the exact grid value.</p>
-    <figcaption>Every document in the sample, placed on the classifier's own score grid. Bar width is the gap to the next representable score, which is 0.0078125 below 2, 0.015625 from 2 to 4 and 0.03125 above 4, because bfloat16 keeps the same eight bits of mantissa at every magnitude. The counts therefore step up at 2 and again at 4: a wider bar collects the documents of two narrower ones, and that step is the grid coarsening rather than anything in the corpus. Read against that, the distribution falls steeply and without a break through the boundary region, which is why a cut placed there decides the fate of far more documents than a cut placed anywhere else on the scale.</figcaption>
+    <figcaption>Every document in the sample, placed on the classifier's own score grid. Bar width is the gap to the next representable score, which is 0.0078125 below 2, 0.015625 from 2 to 4 and 0.03125 above 4, because bfloat16 keeps the same eight bits of mantissa at every magnitude. A wider score interval can collect more documents. Raw counts should therefore be interpreted alongside grid spacing; these bars alone do not establish why the underlying distribution has this shape. The occupied values and their counts show how moving the cut changes sample admission.</figcaption>
   </figure>
 
   <h2>2. The tie cohort</h2>
@@ -230,13 +232,13 @@
   <div class="spotlight" id="tiespot"></div>
 
   <h2>3. What the classifier read</h2>
-  <p class="intro">The score is produced from at most 510 content tokens, and web documents have been getting longer. The share of documents that were truncated before scoring therefore rises across the crawl series, which means the blind spot is widening on its own, with no change to the filter.</p>
+  <p class="intro">The score is produced from at most 510 content tokens. Measured truncation is higher in later snapshots of this sample. This descriptive association does not isolate the cause or establish a monotonic increase.</p>
   <div class="controls" style="padding:12px 18px">
     <div class="ctl">
       <label>Series</label>
       <div class="seg" id="tser">
         <button data-v="sampled" class="on">Sampled documents, 2013 to 2023</button>
-        <button data-v="fixed">Documents scoring exactly 2.0, to 2025</button>
+        <button disabled title="Historical series requires recalculation from raw text">Fixed-score series: correction pending</button>
       </div>
     </div>
     <div class="ctl">
@@ -254,7 +256,7 @@
   </figure>
 
   <h2>4. Check the rounding yourself</h2>
-  <p class="intro">The rounding result needs none of the downloads and none of this page. Read <code>src/run_edu_bert.py</code> in the classifier repository, then run one line of NumPy against any FineWeb-Edu shard. The button below runs the same identity in your browser against the 233 grid values embedded in this page, weighted by how many documents sit on each.</p>
+  <p class="intro">The rounding result needs none of the downloads and none of this page. Read <a href="https://github.com/huggingface/cosmopedia/blob/main/classification/run_edu_bert.py"><code>classification/run_edu_bert.py</code></a> in Hugging Face’s Cosmopedia repository, then run one line of NumPy against any FineWeb-Edu shard. The button below runs the same identity in your browser against the 233 grid values embedded in this page, weighted by how many documents sit on each.</p>
   <pre class="code">(np.round(np.clip(df.score, 0, 5)).astype(int) == df.int_score).all()        # True
 (np.floor(np.clip(df.score, 0, 5) + 0.5).astype(int) == df.int_score).all()  # False</pre>
   <button class="run" id="runcheck">Run the check on this page</button>
@@ -262,11 +264,11 @@
   <p class="intro" style="margin-top:10px">The first line is the rounding NumPy performs and the one the classifier's own inference script uses. The second is the rounding most readers assume. They disagree about two grid points, and one of those two sits on the admission boundary.</p>
 
   <div class="foot">
-    <p><b>What this is.</b> A front-end over the frozen dataset behind <em>What actually admits a document to FineWeb-Edu</em>. Every figure on this page is computed in the browser from two small tables shipped inside the file: the 233-point score grid with document and token counts, and the per-snapshot truncation series. Nothing is fetched at runtime, so the page works offline and cannot drift from the record.</p>
+    <p><b>What this is.</b> A front-end over the frozen dataset behind <em>What actually admits a document to FineWeb-Edu</em>. The score grid, corrected per-snapshot truncation series and corrected retained-document summary are embedded in this file. Nothing is fetched at runtime. The corrected measurements differ from the historical DOI release as documented in the correction notice.</p>
     <p><b>Sample.</b> One random shard from each Common Crawl dump in <code>HuggingFaceFW/fineweb-edu-score-2</code>, seeded and pinned before download. The 16 dumps covering 2024 and 2025 partition documents across shards by score, so a single shard from them is not a random sample; they are excluded from the headline, leaving 94 dumps and 84,005,795 documents spanning 2013 to 2023.</p>
-    <p><b>Guardrails.</b> <code>fineweb-edu-score-2</code> retains <code>int_score &gt;= 2</code> only, so the grid starts at a raw 1.5 and nothing here speaks to documents below it; the 975,821 documents at exactly 1.5 are a floor, not a full count. Retention percentages on this page are shares of that already-filtered population, not of raw Common Crawl. Truncation is measured on a clustered sample of 188,000 documents, 2,000 per snapshot, so its intervals are floors. The second truncation series holds score constant at exactly 2.0 to remove composition effects, and it includes the score-partitioned 2024 and 2025 dumps, which is defensible only because score is fixed; those snapshots are drawn as hollow points for that reason.</p>
-    <p><b>What this does not claim.</b> No downstream model was trained or evaluated here, so nothing on this page says the corpus is worse for any of it. The finding is that a filter described in one line makes three decisions the line does not mention, and the largest of them admits most of what the corpus contains.</p>
-    <p><b>Disclosure.</b> No third party reviewed, funded or directed this work. The analysis was carried out with the assistance of Claude, a model made by Anthropic, which competes with the organisations that produce and publish these corpora.</p>
+    <p><b>Guardrails.</b> <code>fineweb-edu-score-2</code> retains <code>int_score &gt;= 2</code> only, so the grid starts at a raw 1.5 and nothing here speaks to documents below it; the 975,821 documents at exactly 1.5 are a floor, not a full count. Retention percentages on this page are shares of that already-filtered population, not of raw Common Crawl. Truncation uses 188,000 sampled documents, 2,000 per snapshot, clustered within selected shards. No population confidence interval is claimed. The historical fixed-score series used capped, first-eligible document pools; fixing the score does not remove all composition or selection effects. Its correction is pending and it is not plotted.</p>
+    <p><b>What this does not claim.</b> No downstream model was trained or evaluated here, so nothing on this page says the corpus is worse for any of it. The finding is that a filter described in one line makes three decisions the line does not mention, and rounding admits most of the retained documents in this sample, as quantified above.</p>
+    <p><b>Disclosure.</b> No third party reviewed, funded or directed this work. Claude, made by Anthropic, assisted the original analysis. OpenAI GPT-6 assisted the correction. Both providers compete with model providers discussed in the research. Model assistance does not constitute independent acceptance.</p>
     <p><b>Reproducibility.</b> The embedded tables are regenerated from <code>full_scores.parquet</code> and the analysis outputs by <code>build_tool.py</code>. The full pipeline, the pinned shard manifest and the write-up are in the <a href="https://doi.org/10.5281/zenodo.21740081" target="_blank" rel="noopener">Zenodo record</a> and the <a href="https://github.com/NMAIResearch/fineweb-edu-threshold" target="_blank" rel="noopener">GitHub repository</a>. Change the data, run the build, the page moves. &nbsp;&middot;&nbsp; <a href="https://nmairesearch.github.io/">More from NM AI Research</a></p>
   </div>
 </div>
@@ -512,212 +514,105 @@ const GRID_CSV = `score,docs,tokens,int_score
 5.28125,1,862,5`;
 /* GRID-END */
 /* DUMPS-START */
-const DUMP_CSV = `dump,docs,rounded_in_pct,trunc_pct
-CC-MAIN-2013-20,894848,12.024,49.10
-CC-MAIN-2013-48,892104,11.882,51.90
-CC-MAIN-2014-10,891695,12.144,54.70
-CC-MAIN-2014-15,894812,12.274,51.75
-CC-MAIN-2014-23,881811,12.114,51.50
-CC-MAIN-2014-35,895454,11.787,53.60
-CC-MAIN-2014-41,881820,12.342,51.60
-CC-MAIN-2014-42,879466,11.805,48.75
-CC-MAIN-2014-49,877157,12.219,51.25
-CC-MAIN-2014-52,880423,11.997,50.95
-CC-MAIN-2015-06,882823,12.137,51.45
-CC-MAIN-2015-11,877275,11.941,52.45
-CC-MAIN-2015-14,872370,12.212,51.30
-CC-MAIN-2015-18,879376,11.946,51.65
-CC-MAIN-2015-22,878928,12.190,50.25
-CC-MAIN-2015-27,874268,12.244,52.50
-CC-MAIN-2015-32,882221,11.863,50.15
-CC-MAIN-2015-35,874961,11.893,50.95
-CC-MAIN-2015-40,868823,12.221,53.40
-CC-MAIN-2015-48,877601,11.999,52.00
-CC-MAIN-2016-07,866379,11.972,50.75
-CC-MAIN-2016-18,876003,12.184,51.05
-CC-MAIN-2016-22,847771,12.045,52.20
-CC-MAIN-2016-26,857081,12.116,53.75
-CC-MAIN-2016-30,849392,12.058,51.70
-CC-MAIN-2016-36,837767,12.153,51.95
-CC-MAIN-2016-40,867886,12.171,52.65
-CC-MAIN-2016-44,918710,12.272,49.70
-CC-MAIN-2016-50,911811,12.503,49.15
-CC-MAIN-2017-04,918864,12.482,50.90
-CC-MAIN-2017-09,914545,12.358,52.70
-CC-MAIN-2017-13,906559,12.513,51.25
-CC-MAIN-2017-17,906772,12.401,53.30
-CC-MAIN-2017-22,914127,12.213,52.75
-CC-MAIN-2017-26,933134,12.083,51.90
-CC-MAIN-2017-30,907596,12.169,49.30
-CC-MAIN-2017-34,965223,11.748,52.00
-CC-MAIN-2017-39,927250,12.065,53.10
-CC-MAIN-2017-43,950688,11.808,50.55
-CC-MAIN-2017-47,927116,12.048,52.20
-CC-MAIN-2017-51,953225,11.830,52.20
-CC-MAIN-2018-05,921866,12.184,53.15
-CC-MAIN-2018-09,955882,12.153,50.35
-CC-MAIN-2018-13,953508,12.002,49.75
-CC-MAIN-2018-17,954980,12.220,53.45
-CC-MAIN-2018-22,941889,12.132,52.60
-CC-MAIN-2018-26,929606,12.580,53.15
-CC-MAIN-2018-30,934517,12.185,54.75
-CC-MAIN-2018-34,939183,12.789,54.05
-CC-MAIN-2018-39,937281,12.246,53.05
-CC-MAIN-2018-43,923842,12.941,55.10
-CC-MAIN-2018-47,894110,12.540,54.65
-CC-MAIN-2018-51,920809,12.339,54.35
-CC-MAIN-2019-04,920873,12.082,53.75
-CC-MAIN-2019-09,912627,12.343,54.45
-CC-MAIN-2019-13,898225,12.412,55.45
-CC-MAIN-2019-18,899704,12.377,54.45
-CC-MAIN-2019-22,894131,12.308,56.35
-CC-MAIN-2019-26,900853,12.288,55.60
-CC-MAIN-2019-30,906701,12.338,55.10
-CC-MAIN-2019-35,907089,12.255,58.30
-CC-MAIN-2019-39,905838,12.326,55.75
-CC-MAIN-2019-43,912479,12.436,55.00
-CC-MAIN-2019-47,890717,12.358,55.85
-CC-MAIN-2019-51,896548,12.572,55.10
-CC-MAIN-2020-05,895200,12.582,56.70
-CC-MAIN-2020-10,887413,12.472,54.50
-CC-MAIN-2020-16,904267,12.549,54.70
-CC-MAIN-2020-24,910451,12.307,55.35
-CC-MAIN-2020-29,904587,12.498,56.15
-CC-MAIN-2020-34,890338,12.517,55.40
-CC-MAIN-2020-40,912755,12.329,55.55
-CC-MAIN-2020-45,888599,12.345,56.20
-CC-MAIN-2020-50,904339,12.398,54.60
-CC-MAIN-2021-04,904516,12.415,59.25
-CC-MAIN-2021-10,888288,12.404,55.95
-CC-MAIN-2021-17,875511,12.509,57.10
-CC-MAIN-2021-21,868371,12.578,56.15
-CC-MAIN-2021-25,876825,12.396,56.40
-CC-MAIN-2021-31,882815,12.598,58.55
-CC-MAIN-2021-39,864457,12.516,59.10
-CC-MAIN-2021-43,878637,12.616,55.40
-CC-MAIN-2021-49,868554,12.536,55.80
-CC-MAIN-2022-05,864396,12.698,57.85
-CC-MAIN-2022-21,873589,12.744,59.80
-CC-MAIN-2022-27,864927,12.718,57.75
-CC-MAIN-2022-33,860056,12.543,59.50
-CC-MAIN-2022-40,854516,12.829,60.75
-CC-MAIN-2022-49,851927,12.810,57.55
-CC-MAIN-2023-06,864591,12.853,58.75
-CC-MAIN-2023-14,827764,12.800,63.35
-CC-MAIN-2023-23,818325,12.893,60.45
-CC-MAIN-2023-40,835297,13.227,59.30
-CC-MAIN-2023-50,835091,13.253,58.00`;
+const DUMP_CSV = `dump,docs,rounded_in_pct,n_tok,truncated,trunc_pct
+CC-MAIN-2013-20,894848,12.024,2000,980,49.00
+CC-MAIN-2013-48,892104,11.882,2000,1037,51.85
+CC-MAIN-2014-10,891695,12.144,2000,1092,54.60
+CC-MAIN-2014-15,894812,12.274,2000,1032,51.60
+CC-MAIN-2014-23,881811,12.114,2000,1027,51.35
+CC-MAIN-2014-35,895454,11.787,2000,1066,53.30
+CC-MAIN-2014-41,881820,12.342,2000,1024,51.20
+CC-MAIN-2014-42,879466,11.805,2000,973,48.65
+CC-MAIN-2014-49,877157,12.219,2000,1021,51.05
+CC-MAIN-2014-52,880423,11.997,2000,1017,50.85
+CC-MAIN-2015-06,882823,12.137,2000,1026,51.30
+CC-MAIN-2015-11,877275,11.941,2000,1044,52.20
+CC-MAIN-2015-14,872370,12.212,2000,1023,51.15
+CC-MAIN-2015-18,879376,11.946,2000,1029,51.45
+CC-MAIN-2015-22,878928,12.190,2000,1003,50.15
+CC-MAIN-2015-27,874268,12.244,2000,1048,52.40
+CC-MAIN-2015-32,882221,11.863,2000,1002,50.10
+CC-MAIN-2015-35,874961,11.893,2000,1018,50.90
+CC-MAIN-2015-40,868823,12.221,2000,1067,53.35
+CC-MAIN-2015-48,877601,11.999,2000,1033,51.65
+CC-MAIN-2016-07,866379,11.972,2000,1010,50.50
+CC-MAIN-2016-18,876003,12.184,2000,1016,50.80
+CC-MAIN-2016-22,847771,12.045,2000,1038,51.90
+CC-MAIN-2016-26,857081,12.116,2000,1072,53.60
+CC-MAIN-2016-30,849392,12.058,2000,1032,51.60
+CC-MAIN-2016-36,837767,12.153,2000,1034,51.70
+CC-MAIN-2016-40,867886,12.171,2000,1047,52.35
+CC-MAIN-2016-44,918710,12.272,2000,993,49.65
+CC-MAIN-2016-50,911811,12.503,2000,980,49.00
+CC-MAIN-2017-04,918864,12.482,2000,1008,50.40
+CC-MAIN-2017-09,914545,12.358,2000,1053,52.65
+CC-MAIN-2017-13,906559,12.513,2000,1022,51.10
+CC-MAIN-2017-17,906772,12.401,2000,1064,53.20
+CC-MAIN-2017-22,914127,12.213,2000,1051,52.55
+CC-MAIN-2017-26,933134,12.083,2000,1036,51.80
+CC-MAIN-2017-30,907596,12.169,2000,984,49.20
+CC-MAIN-2017-34,965223,11.748,2000,1036,51.80
+CC-MAIN-2017-39,927250,12.065,2000,1057,52.85
+CC-MAIN-2017-43,950688,11.808,2000,1007,50.35
+CC-MAIN-2017-47,927116,12.048,2000,1039,51.95
+CC-MAIN-2017-51,953225,11.830,2000,1039,51.95
+CC-MAIN-2018-05,921866,12.184,2000,1059,52.95
+CC-MAIN-2018-09,955882,12.153,2000,1002,50.10
+CC-MAIN-2018-13,953508,12.002,2000,989,49.45
+CC-MAIN-2018-17,954980,12.220,2000,1064,53.20
+CC-MAIN-2018-22,941889,12.132,2000,1049,52.45
+CC-MAIN-2018-26,929606,12.580,2000,1062,53.10
+CC-MAIN-2018-30,934517,12.185,2000,1088,54.40
+CC-MAIN-2018-34,939183,12.789,2000,1078,53.90
+CC-MAIN-2018-39,937281,12.246,2000,1053,52.65
+CC-MAIN-2018-43,923842,12.941,2000,1097,54.85
+CC-MAIN-2018-47,894110,12.540,2000,1091,54.55
+CC-MAIN-2018-51,920809,12.339,2000,1084,54.20
+CC-MAIN-2019-04,920873,12.082,2000,1072,53.60
+CC-MAIN-2019-09,912627,12.343,2000,1088,54.40
+CC-MAIN-2019-13,898225,12.412,2000,1108,55.40
+CC-MAIN-2019-18,899704,12.377,2000,1086,54.30
+CC-MAIN-2019-22,894131,12.308,2000,1120,56.00
+CC-MAIN-2019-26,900853,12.288,2000,1105,55.25
+CC-MAIN-2019-30,906701,12.338,2000,1097,54.85
+CC-MAIN-2019-35,907089,12.255,2000,1164,58.20
+CC-MAIN-2019-39,905838,12.326,2000,1113,55.65
+CC-MAIN-2019-43,912479,12.436,2000,1095,54.75
+CC-MAIN-2019-47,890717,12.358,2000,1116,55.80
+CC-MAIN-2019-51,896548,12.572,2000,1097,54.85
+CC-MAIN-2020-05,895200,12.582,2000,1130,56.50
+CC-MAIN-2020-10,887413,12.472,2000,1083,54.15
+CC-MAIN-2020-16,904267,12.549,2000,1089,54.45
+CC-MAIN-2020-24,910451,12.307,2000,1103,55.15
+CC-MAIN-2020-29,904587,12.498,2000,1116,55.80
+CC-MAIN-2020-34,890338,12.517,2000,1106,55.30
+CC-MAIN-2020-40,912755,12.329,2000,1105,55.25
+CC-MAIN-2020-45,888599,12.345,2000,1121,56.05
+CC-MAIN-2020-50,904339,12.398,2000,1087,54.35
+CC-MAIN-2021-04,904516,12.415,2000,1181,59.05
+CC-MAIN-2021-10,888288,12.404,2000,1115,55.75
+CC-MAIN-2021-17,875511,12.509,2000,1139,56.95
+CC-MAIN-2021-21,868371,12.578,2000,1118,55.90
+CC-MAIN-2021-25,876825,12.396,2000,1125,56.25
+CC-MAIN-2021-31,882815,12.598,2000,1166,58.30
+CC-MAIN-2021-39,864457,12.516,2000,1179,58.95
+CC-MAIN-2021-43,878637,12.616,2000,1102,55.10
+CC-MAIN-2021-49,868554,12.536,2000,1113,55.65
+CC-MAIN-2022-05,864396,12.698,2000,1154,57.70
+CC-MAIN-2022-21,873589,12.744,2000,1192,59.60
+CC-MAIN-2022-27,864927,12.718,2000,1151,57.55
+CC-MAIN-2022-33,860056,12.543,2000,1185,59.25
+CC-MAIN-2022-40,854516,12.829,2000,1212,60.60
+CC-MAIN-2022-49,851927,12.810,2000,1146,57.30
+CC-MAIN-2023-06,864591,12.853,2000,1172,58.60
+CC-MAIN-2023-14,827764,12.800,2000,1262,63.10
+CC-MAIN-2023-23,818325,12.893,2000,1207,60.35
+CC-MAIN-2023-40,835297,13.227,2000,1184,59.20
+CC-MAIN-2023-50,835091,13.253,2000,1157,57.85`;
 /* DUMPS-END */
-/* FIXED-START */
-const FIXED_CSV = `dump,year,trunc_pct,median_tok,partitioned
-CC-MAIN-2013-20,2013,52.7143,547.5,False
-CC-MAIN-2013-48,2013,50.4286,512.5,False
-CC-MAIN-2014-10,2014,51.4286,524,False
-CC-MAIN-2014-15,2014,50.2857,513,False
-CC-MAIN-2014-23,2014,53.4286,570,False
-CC-MAIN-2014-35,2014,47.5714,487,False
-CC-MAIN-2014-41,2014,53.5714,547,False
-CC-MAIN-2014-42,2014,49.8571,510,False
-CC-MAIN-2014-49,2014,52.1429,541,False
-CC-MAIN-2014-52,2014,49.5714,504.5,False
-CC-MAIN-2015-06,2015,53.4286,550,False
-CC-MAIN-2015-11,2015,51.8571,527.5,False
-CC-MAIN-2015-14,2015,50.7143,516,False
-CC-MAIN-2015-18,2015,52.7143,545,False
-CC-MAIN-2015-22,2015,52.5714,539.5,False
-CC-MAIN-2015-27,2015,49.8571,508.5,False
-CC-MAIN-2015-32,2015,50.0000,506.5,False
-CC-MAIN-2015-35,2015,50.1429,513,False
-CC-MAIN-2015-40,2015,53.7143,554.5,False
-CC-MAIN-2015-48,2015,47.4286,483.5,False
-CC-MAIN-2016-07,2016,52.5714,533,False
-CC-MAIN-2016-18,2016,51.8571,533.5,False
-CC-MAIN-2016-22,2016,52.1429,534,False
-CC-MAIN-2016-26,2016,50.7143,515.5,False
-CC-MAIN-2016-30,2016,52.4286,539.5,False
-CC-MAIN-2016-36,2016,53.5714,540,False
-CC-MAIN-2016-40,2016,49.5714,506.5,False
-CC-MAIN-2016-44,2016,49.8571,505.5,False
-CC-MAIN-2016-50,2016,50.4286,514,False
-CC-MAIN-2017-04,2017,49.1429,499.5,False
-CC-MAIN-2017-09,2017,54.7143,551.5,False
-CC-MAIN-2017-13,2017,52.4286,530,False
-CC-MAIN-2017-17,2017,56.7143,576.5,False
-CC-MAIN-2017-22,2017,54.5714,558.5,False
-CC-MAIN-2017-26,2017,50.5714,519,False
-CC-MAIN-2017-30,2017,55.1429,552.5,False
-CC-MAIN-2017-34,2017,52.8571,539.5,False
-CC-MAIN-2017-39,2017,55.4286,571,False
-CC-MAIN-2017-43,2017,53.8571,546.5,False
-CC-MAIN-2017-47,2017,49.8571,509.5,False
-CC-MAIN-2017-51,2017,53.0000,548.5,False
-CC-MAIN-2018-05,2018,56.2857,566,False
-CC-MAIN-2018-09,2018,53.4286,551.5,False
-CC-MAIN-2018-13,2018,51.8571,524.5,False
-CC-MAIN-2018-17,2018,53.8571,556.5,False
-CC-MAIN-2018-22,2018,54.5714,551.5,False
-CC-MAIN-2018-26,2018,57.1429,564.5,False
-CC-MAIN-2018-30,2018,51.4286,527,False
-CC-MAIN-2018-34,2018,54.8571,558,False
-CC-MAIN-2018-39,2018,55.7143,568.5,False
-CC-MAIN-2018-43,2018,56.7143,582,False
-CC-MAIN-2018-47,2018,51.7143,526.5,False
-CC-MAIN-2018-51,2018,53.4286,543,False
-CC-MAIN-2019-04,2019,54.8571,578.5,False
-CC-MAIN-2019-09,2019,56.5714,549,False
-CC-MAIN-2019-13,2019,57.1429,581.5,False
-CC-MAIN-2019-18,2019,55.4286,563.5,False
-CC-MAIN-2019-22,2019,55.0000,586.5,False
-CC-MAIN-2019-26,2019,52.4286,534,False
-CC-MAIN-2019-30,2019,53.8571,559,False
-CC-MAIN-2019-35,2019,56.1429,584,False
-CC-MAIN-2019-39,2019,55.4286,568.5,False
-CC-MAIN-2019-43,2019,52.5714,538.5,False
-CC-MAIN-2019-47,2019,56.1429,570.5,False
-CC-MAIN-2019-51,2019,53.7143,560,False
-CC-MAIN-2020-05,2020,54.1429,561.5,False
-CC-MAIN-2020-10,2020,56.2857,570.5,False
-CC-MAIN-2020-16,2020,52.4286,539,False
-CC-MAIN-2020-24,2020,52.5714,542,False
-CC-MAIN-2020-29,2020,56.5714,596.5,False
-CC-MAIN-2020-34,2020,57.2857,569.5,False
-CC-MAIN-2020-40,2020,54.8571,545,False
-CC-MAIN-2020-45,2020,54.2857,556.5,False
-CC-MAIN-2020-50,2020,57.2857,584,False
-CC-MAIN-2021-04,2021,57.7143,605,False
-CC-MAIN-2021-10,2021,54.7143,569.5,False
-CC-MAIN-2021-17,2021,59.0000,613,False
-CC-MAIN-2021-21,2021,56.4286,602.5,False
-CC-MAIN-2021-25,2021,54.2857,566,False
-CC-MAIN-2021-31,2021,55.7143,567,False
-CC-MAIN-2021-39,2021,53.7143,561.5,False
-CC-MAIN-2021-43,2021,59.7143,616,False
-CC-MAIN-2021-49,2021,56.1429,594.5,False
-CC-MAIN-2022-05,2022,57.7143,607,False
-CC-MAIN-2022-21,2022,56.7143,600,False
-CC-MAIN-2022-27,2022,57.8571,602,False
-CC-MAIN-2022-33,2022,59.0000,614.5,False
-CC-MAIN-2022-40,2022,58.2857,602,False
-CC-MAIN-2022-49,2022,59.2857,640,False
-CC-MAIN-2023-06,2023,60.0000,617.5,False
-CC-MAIN-2023-14,2023,57.7143,590.5,False
-CC-MAIN-2023-23,2023,58.7143,606,False
-CC-MAIN-2023-40,2023,61.7143,643,False
-CC-MAIN-2023-50,2023,60.1429,620,False
-CC-MAIN-2024-10,2024,58.2857,640,True
-CC-MAIN-2024-18,2024,60.2857,630,True
-CC-MAIN-2024-22,2024,61.1429,651.5,True
-CC-MAIN-2024-26,2024,63.0000,640.5,True
-CC-MAIN-2024-30,2024,55.8571,582.5,True
-CC-MAIN-2024-33,2024,60.8571,638.5,True
-CC-MAIN-2024-38,2024,60.7143,623.5,True
-CC-MAIN-2024-46,2024,60.1050,625,True
-CC-MAIN-2025-08,2025,59.6154,609.5,True
-CC-MAIN-2025-13,2025,63.0000,666,True
-CC-MAIN-2025-18,2025,57.5714,601,True
-CC-MAIN-2025-21,2025,57.5714,631,True
-CC-MAIN-2025-26,2025,62.2857,651,True`;
-/* FIXED-END */
+/* METRICS-START */
+const METRICS = {"purpose": "Authoritative content-only metrics derived from unchanged frozen encoded lengths", "input_sha256": "983def5d5a306dd6777f3be13136ec135a73c89bd120cd96058ff05b7e56aed2", "counting": "bert_tokens includes CLS and SEP; subtract two before applying the content budget", "content_budget": 510, "populations": {"all": {"n": 188000, "truncated": 101357, "old_truncated": 101714, "content_tokens": 170394619, "visible_content_tokens": 77482545, "truncated_pct": 53.91329787234043, "visible_pct": 45.472413069569996, "median_content_tokens": 555.0}, "retained": {"n": 40431, "truncated": 23445, "old_truncated": 23516, "content_tokens": 40802906, "visible_content_tokens": 17087287, "truncated_pct": 57.98768271870595, "visible_pct": 41.87762263795623, "median_content_tokens": 605.0}, "rounded_in": {"n": 23081, "truncated": 13064, "old_truncated": 13109, "content_tokens": 22711107, "visible_content_tokens": 9649650, "truncated_pct": 56.6006672154586, "visible_pct": 42.488681859497206, "median_content_tokens": 591.0}, "above": {"n": 17350, "truncated": 10381, "old_truncated": 10407, "content_tokens": 18091799, "visible_content_tokens": 7437637, "truncated_pct": 59.83285302593659, "visible_pct": 41.110544064744474, "median_content_tokens": 623.0}, "tie": {"n": 998, "truncated": 561, "old_truncated": 563, "content_tokens": 896312, "visible_content_tokens": 411992, "truncated_pct": 56.212424849699396, "visible_pct": 45.96524424530743, "median_content_tokens": 581.5}}, "trend": {"n_dumps": 94, "first_pct": 49.0, "last_pct": 57.85, "pearson_year": 0.8496383913803628}, "content_gpt2_median_ratio": 0.9739046591057036};
+/* METRICS-END */
 
 /* ---- parsing ---- */
 function parseCSV(t){
@@ -731,7 +626,7 @@ function parseCSV(t){
 }
 const GRID  = parseCSV(GRID_CSV);
 const DUMPS = parseCSV(DUMP_CSV);
-const FIXED = parseCSV(FIXED_CSV);
+
 
 const TOT_D = GRID.reduce((a, r) => a + r.docs, 0);
 const TOT_T = GRID.reduce((a, r) => a + r.tokens, 0);
@@ -901,8 +796,7 @@ const TREND = document.getElementById("trend");
 function renderTrend(){
   const W = 960, H = 320, L = 52, R = 46, T = 16, B = 40;
   const pw = W - L - R, ph = H - T - B;
-  const fixed = S.tser === "fixed";
-  const rows = fixed ? FIXED : DUMPS;
+  const rows = DUMPS;
   const yr = d => +String(d).match(/CC-MAIN-(\d{4})/)[1];
   const trunc = rows.map(r => r.trunc_pct);
   const lo = 44, hi = 66;
@@ -936,7 +830,7 @@ function renderTrend(){
 
   // optional second axis: rounded-in share of all documents
   let second = "";
-  if (S.tover === "on" && !fixed){
+  if (S.tover === "on"){
     const rlo = 11, rhi = 14;
     const ry = v => T + ph - (v - rlo) / (rhi - rlo) * ph;
     second = `<path d="${DUMPS.map((r, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + ry(r.rounded_in_pct).toFixed(1)).join(" ")}" fill="none" stroke="var(--good)" stroke-width="1.6"/>`;
@@ -958,19 +852,21 @@ function renderTrend(){
     ys.forEach((v, i) => { num += (v - myy) * (trunc[i] - my); d1 += (v - myy) ** 2; d2 += (trunc[i] - my) ** 2; });
     return num / Math.sqrt(d1 * d2);
   })();
-  document.getElementById("tcap").innerHTML = fixed
-    ? "Documents scoring <b>exactly 2.0</b>, one grid point, so composition is held fixed and only document length is moving: " +
-      f1(first) + "% truncated in 2013 rising to " + f1(last) + "% in 2025, Pearson r with year of +" + r.toFixed(3) +
-      ". Hollow points are the 2024 and 2025 dumps, which partition documents across shards by score; holding score constant is what makes them usable here. The dashed line is the least squares fit."
-    : "All sampled documents across the 94 unpartitioned snapshots, 2,000 per snapshot: " +
-      f1(first) + "% truncated in 2013 rising to " + f1(last) + "% in 2023, Pearson r with year of +" + r.toFixed(3) +
-      ". Among retained documents the share is higher still at 58.2%, and token for token the classifier saw 41.9% of the retained text. The dashed line is the least squares fit.";
+  const retained = METRICS.populations.retained;
+  document.getElementById("tcap").innerHTML =
+    "All sampled documents across " + rows.length + " snapshots, 2,000 per snapshot: " +
+    fi(rows[0].truncated) + "/" + fi(rows[0].n_tok) + " (" + f1(first) + "%) truncated in the first snapshot, " +
+    fi(rows[n - 1].truncated) + "/" + fi(rows[n - 1].n_tok) + " (" + f1(last) + "%) in the last; Pearson r with year +" + r.toFixed(3) +
+    ". Among retained documents, " + fi(retained.truncated) + "/" + fi(retained.n) + " (" + f1(retained.truncated_pct) +
+    "%) exceed the content budget. The visible prefixes contain " + fi(retained.visible_content_tokens) + "/" + fi(retained.content_tokens) +
+    " content tokens (" + f1(retained.visible_pct) + "%), N = " + fi(retained.n) + " retained documents. Special tokens are excluded. The dashed line fits snapshot order.";
+
 }
 TREND.addEventListener("mousemove", e => {
   const t = e.target.closest("circle"); if (!t) return;
-  const rows = S.tser === "fixed" ? FIXED : DUMPS, r = rows[+t.dataset.i];
+  const rows = DUMPS, r = rows[+t.dataset.i];
   document.getElementById("thov").innerHTML = "<b>" + r.dump + "</b> &nbsp; " + f1(r.trunc_pct) +
-    "% truncated" + (r.median_tok ? " &nbsp; median " + r.median_tok + " classifier tokens" : "") +
+    "% truncated (" + fi(r.truncated) + "/" + fi(r.n_tok) + ")" + (r.median_tok ? " &nbsp; median " + r.median_tok + " classifier tokens" : "") +
     (r.rounded_in_pct ? " &nbsp; " + f1(r.rounded_in_pct) + "% rounded in" : "") +
     (r.partitioned === "True" ? " &nbsp; (score-partitioned dump)" : "");
 });

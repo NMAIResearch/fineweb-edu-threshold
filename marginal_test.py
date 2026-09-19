@@ -74,7 +74,7 @@ for k, v in buf.items():
     hs = Counter(host(x[1]) for x in v)
     print(f"  {k:<22}{len(v):>8,}{np.median(tk):>12,.0f}{tk.mean():>10,.0f}{len(hs):>16,}")
 
-# top hosts, boundary pair only — a reader will want to see them
+# top hosts, boundary pair only: a reader will want to see them
 for k in ("tie_2.500000_CUT", "next_2.515625_KEPT"):
     hs = Counter(host(x[1]) for x in buf[k]).most_common(8)
     print(f"  top hosts {k}: " + ", ".join(f"{h}({c})" for h, c in hs))
@@ -99,7 +99,7 @@ def auc(a, b, label, shuffle=False):
     return sc.mean()
 
 
-print("\nCAN A CLASSIFIER TELL THE TWO SIDES APART?  (0.5 = indistinguishable)")
+print("\nCAN A CLASSIFIER TELL THE TWO SIDES APART?  (0.5 = chance-discrimination baseline)")
 b_auc = auc("tie_2.500000_CUT", "next_2.515625_KEPT",
             "BOUNDARY  2.500000 cut  vs  2.515625 kept")
 auc("tie_2.500000_CUT", "next_2.515625_KEPT",
@@ -107,8 +107,8 @@ auc("tie_2.500000_CUT", "next_2.515625_KEPT",
 band = auc("rounded_in", "above_nominal", "BAND      rounded-in  vs  above nominal")
 ctrl = auc("ctrl_low_<=2.0", "ctrl_high_>=4.0", "CONTROL   score <= 2.0  vs  score >= 4.0")
 
-print(f"\nThe control separates at AUC {ctrl:.3f}, so the features and model can see educational")
-print(f"quality when it is there. On the two sides of the actual admission boundary they reach")
+print(f"\nThe control separates score-defined groups at AUC {ctrl:.3f}.")
+print("This does not independently validate educational quality. The boundary comparison reaches")
 print(f"{b_auc:.3f}. Band comparison {band:.3f}.")
 
 pd.DataFrame([{"group": k, "n": len(v),

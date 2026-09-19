@@ -1,20 +1,9 @@
 #!/usr/bin/env python3
-"""Two checks forced by the Gemini red-team review (2026-08-01).
+"""Fixed-score truncation and adjacent-score separability checks.
 
-CHECK A (their claim 5b): "excluding the 2024-25 dumps invalidates the longitudinal
-truncation trend". Those dumps partition documents across shards by score, so a whole-dump
-truncation rate cannot be estimated from one shard. But conditioning on a SINGLE score
-grid point removes the composition bias entirely: within one exact score value, a
-score-partitioned shard is still a fair sample of documents at that score. So measure
-truncation among documents scoring exactly 2.0 (a populated grid point near the mode) for
-every dump, 2013 to 2025. If the trend holds within-stratum, the exclusion did not
-manufacture it.
-
-CHECK B (their claim 3b): "points either side of any threshold are trivially similar, so
-AUC 0.5 at the boundary says nothing about THIS filter". Correct as stated, and testable:
-run the identical one-step comparison at several other grid points. If every pair scores
-about 0.5, the result is a property of thresholding a continuous score, not a finding about
-2.5, and section 4 has to be reframed rather than defended.
+Each pool uses the first eligible rows up to its cap. Conditioning on a score
+controls observed score composition but does not establish representative sampling
+within a score stratum. Near-chance AUC is not an equivalence result.
 """
 import json, os, time
 import numpy as np, pandas as pd
@@ -49,9 +38,10 @@ for j, dump in enumerate(sorted(man), 1):
     if len(txt) < 100:
         print(f"  {dump}: only {len(txt)} docs at 2.0, skipped", flush=True)
         continue
-    L = np.array([len(e.ids) for e in tok.encode_batch(txt)])
+    L = np.array([len(e.ids) - sum(e.special_tokens_mask) for e in tok.encode_batch(txt)])
     rows.append({"dump": dump, "year": int(dump.split("-")[2]), "n": len(L),
                  "trunc_pct": (L > CONTENT).mean() * 100, "median_tok": float(np.median(L)),
+                 "counting_version": "content_without_special_tokens",
                  "partitioned": not man[dump]["shard"].startswith("train-")})
     if j % 20 == 0:
         print(f"  ...{j}/110 dumps ({(time.time()-t0)/60:.1f} min)", flush=True)

@@ -1,3 +1,5 @@
+Purpose: document the repository and explorer correction. Content-only token summaries have been recalculated. The historical fixed-score extension remains unresolved. OpenAI GPT-6 assisted these corrections.
+
 # What actually admits a document to FineWeb-Edu
 
 Three operational details in a published quality filter, measured across 84 million
@@ -7,17 +9,19 @@ documents and 94 Common Crawl snapshots.
 
 **Interactive tool:** [Threshold Explorer](https://nmairesearch.github.io/fineweb-edu-threshold/)
 
-The article is `fineweb_edu_threshold.pdf` (source: `article_draft_v2.md`). This
-bundle lets a reader reproduce every figure without the author's cooperation.
+The manuscript candidate is `article_draft_v2.md`. A corrected PDF has not been produced. This
+bundle provides frozen intermediates and separate analysis scripts. Their verification coverage is described below.
 
 ## The tool
 
+The explorer uses the corrected content-only series. The fixed-score panel is unavailable pending recalculation; `redteam_check_a.csv` is preserved as historical evidence. See [CORRECTIONS.md](CORRECTIONS.md).
+
 `index.html` is a threshold explorer over the frozen data: move the raw admission cut
-across the 233-point bfloat16 grid, switch the rounding rule to watch the 458,461-document
+across the 233 observed score values in the sample, switch the rounding rule to watch the 458,461-document
 tie cohort at 2.5 appear and disappear, and read the truncation trend across the crawl
 series. It is one self-contained file with the data embedded, no dependencies and no
 network calls, so it works from `file://` as well as from Pages. `build_tool.py`
-regenerates `score_grid.csv` from `full_scores.parquet` and re-injects all three tables:
+regenerates the score grid and embeds the corrected per-snapshot series and canonical content metrics:
 
 ```
 python build_tool.py
@@ -25,25 +29,17 @@ python build_tool.py
 
 ## What is measured
 
-1. **Rounding.** The recommended `int_score >= 3` is a rounded integer, so the
-   effective admission boundary is a raw score just above 2.5. 57.2% of the retained
-   corpus was admitted by rounding.
-2. **Truncation.** The classifier reads at most 510 content tokens. 58.2% of retained
-   documents are truncated before scoring; token for token the classifier saw 41.9%
-   of the retained text, a share that falls as web documents grow longer.
-3. **Quantisation.** The classifier ran in bfloat16, giving 233 distinct score values.
-   One grid point sits exactly on 2.5, where half-to-even rounding cuts 458,461
-   documents.
+Under the recorded integer-rounding rule, admission at int_score >= 3 requires a raw score strictly above 2.5; an exact score of 2.5 rounds down. In the 84,005,795-document sample, 10,352,466 of 18,097,417 retained documents scored below 3, or 57.2%, N = 18,097,417 retained documents. The sample contains 458,461 documents exactly at 2.5 and 233 distinct observed score values. These are sample measurements, not a census of the full dataset.
 
-## Reproduce without the download
+Among the 40,431 retained documents in the 188,000-document tokenisation sample, 23,445 exceeded the 510-token content budget, or 58.0%, N = 40,431 retained documents. The measured prefixes contain 17,087,287 of 40,802,906 content tokens, or 41.9%, across those same documents. The CLS and SEP special tokens are excluded from both token counts. This is a token-weighted sample estimate of prefix exposure, not a word count or a full-corpus census.
 
-Every figure in the article is computed from two frozen intermediates that
-`analyse_full.py` writes on its way through the corpus. Both are on the Zenodo
-record (they are too large for git), and `verify_frozen.py` recomputes all of it
-and checks each result against the published number:
+## Reproduce the bounded frozen checks
+
+verify_frozen.py checks the named score-distribution, rounding, tie-count and tokenisation-summary figures against the frozen intermediate files. It does not verify the original shard-to-intermediate transformation, the upstream classifier documentation, the content-classification AUCs or the separate fixed-score trend extension. download_random.py retrieves the manifest-listed shards; analyse_full.py, marginal_test.py and redteam_checks.py perform the corresponding analyses. A complete reproduction must distinguish these steps.
 
 ```
-python verify_frozen.py        # RESULT: PASS, or exits non-zero naming the mismatch
+python recompute_content_metrics.py  # content_metrics.json and corrected_by_dump.csv
+python verify_frozen.py             # named checks only; exits non-zero on mismatch
 ```
 
 That takes about a minute and needs no downloads. What it does not cover is the
@@ -58,13 +54,10 @@ python redteam_checks.py       # the fixed-score truncation trend to 2025 and th
 ```
 
 `random_shard_manifest.json` pins the exact shards (seed 20260801, written before
-download so the selection cannot have followed the results). `by_dump.csv` is the
-per-snapshot output behind the trend figures, `redteam_check_a.csv` the fixed-score
-version of the same trend, and `score_grid.csv` the whole 84-million-document score
-distribution collapsed onto the 233 values the classifier can represent.
+download so the selection cannot have followed the results). `by_dump.csv` preserves the historical aggregate output; `corrected_by_dump.csv` supplies current truncation figures. `redteam_check_a.csv` is the uncorrected historical fixed-score extension, and `score_grid.csv` the whole 84-million-document score
+distribution collapsed onto the 233 distinct values observed in this sample.
 
-The quantisation result needs none of the downloads. Read `src/run_edu_bert.py` in
-`HuggingFaceFW/fineweb-edu-classifier`, then run one line of NumPy against any
+The quantisation result needs none of the downloads. Read [`classification/run_edu_bert.py`](https://github.com/huggingface/cosmopedia/blob/main/classification/run_edu_bert.py) in Hugging Face’s Cosmopedia repository, then run one line of NumPy against any
 FineWeb-Edu shard:
 
 ```python
@@ -82,9 +75,27 @@ moves the headline by about 0.1 percentage points.
 
 ## Conflict of interest
 
-This analysis was carried out with the assistance of Claude, a model made by Anthropic,
+The original analysis was carried out with the assistance of Claude, a model made by Anthropic,
 which competes with the organisations that produce and publish these corpora. See the
 disclosure note in the article.
+
+The article's Verification note identifies its reported upstream source checks. The reproduction instructions distinguish file retrieval, frozen-intermediate checks and the separate analyses. A passing calculation check does not establish semantic support for every statement.
+
+What the author cannot guarantee: text drafted by a language model can carry
+errors that are locally plausible, consistent in tone with the surrounding
+prose, and therefore survive review. Several methods have been deployed to
+mitigate this, including explicit instructions, internal red-teaming and
+cross-lab blindspot checks, but the author does not claim the review is
+exhaustive. Corrections are logged against the DOI when surfaced.
+
+No warranty is offered beyond the terms of the CC BY 4.0 licence. Independent
+analysis and open-science documentation only.
+
+The research question, method, sourcing decisions and analytical judgements are
+the author's. The assisting model is not always a neutral party to the subject
+matter.
+
+OpenAI GPT-6 assisted this correction. OpenAI competes with model providers discussed in the analysis. Verification scope and the historical publication boundary are stated in CORRECTIONS.md.
 
 ## Licence
 

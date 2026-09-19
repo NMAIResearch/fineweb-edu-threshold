@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Every number in the article, computed over the 110-dump random sample.
+"""Score, rounding and tokenisation summaries over the selected shard sample.
 
 Supersedes analyse_pilot.py (5 fixed shards) and tokenizer_check.py (50k from those
 same 5 shards). Same measurements, correct sample, one pass.
@@ -17,6 +17,7 @@ Run:  .venv/bin/python analyse_full.py [data_root]
       default data_root = ~/fw-score2-random/data
 """
 import glob, json, os, sys, time
+from token_lengths import content_lengths
 import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
@@ -36,7 +37,7 @@ print(f"data root: {ROOT}")
 print(f"shards found: {len(files)} of {len(manifest)} in the manifest")
 if len(files) != len(manifest):
     missing = sorted(set(manifest) - {f.split("/")[-2] for f in files})
-    print(f"⚠️  INCOMPLETE — {len(missing)} dumps missing, e.g. {missing[:5]}")
+    print(f"⚠️  INCOMPLETE: {len(missing)} dumps missing, e.g. {missing[:5]}")
     print("   Re-run download_random.py. Results below are PARTIAL.\n")
 assert files, "no parquet files found"
 
@@ -65,7 +66,7 @@ for j, f in enumerate(files, 1):
     d = pf.read(columns=NUM).to_pandas()
     # 93M rows across 110 shards: a per-row dump string is the memory risk, and
     # float64 scores are pointless when every value is bfloat16-exact.
-    # token_count stays int64 — the corpus total overflows int32.
+    # token_count stays int64: the corpus total overflows int32.
     d["score"] = d.score.astype(np.float32)
     d["int_score"] = d.int_score.astype(np.int8)
     d["token_count"] = d.token_count.astype(np.int64)
@@ -91,6 +92,7 @@ for j, f in enumerate(files, 1):
 df = pd.concat(num_frames, ignore_index=True); del num_frames
 sm = pd.DataFrame(samp_rows, columns=["dump", "gpt2_tokens", "score", "int_score", "bert_tokens"])
 df.to_parquet("full_scores.parquet"); sm.to_parquet("full_tokenised_sample.parquet")
+sm["content_tokens"] = content_lengths(sm.bert_tokens)
 
 n, tt = len(df), df.token_count.sum()
 s, isc = df.score.values, df.int_score.values.astype(np.int64)  # score already float32, bf16-exact
@@ -132,7 +134,7 @@ print(f"  OF THE RETAINED CORPUS: {kr.sum()/kept.sum()*100:.1f}% of docs and "
 
 # ---- M2: truncation ----------------------------------------------------------
 N = len(sm)
-r = sm.bert_tokens / sm.gpt2_tokens
+r = sm.content_tokens / sm.gpt2_tokens
 k2 = sm.int_score >= 3
 print(f"\nM2  TRUNCATION  (classifier tokenizer, {CONTENT}-token content budget; N={N:,})")
 print(f"  BERT/GPT-2 token ratio: median {r.median():.3f}, "
@@ -142,10 +144,10 @@ for lab, m in [("all documents", pd.Series(True, index=sm.index)),
                ("retained (int_score>=3)", k2),
                ("rounded-in band", k2 & (sm.score < 3.0)),
                ("above nominal band", sm.score >= 3.0)]:
-    d_ = sm[m]; seen = np.minimum(d_.bert_tokens, CONTENT)
-    print(f"  {lab:<28}{(d_.bert_tokens>CONTENT).mean()*100:>10.1f}%"
-          f"{seen.sum()/d_.bert_tokens.sum()*100:>12.1f}%{np.median(seen/d_.bert_tokens)*100:>13.1f}%")
-p = (sm.bert_tokens > CONTENT).mean()
+    d_ = sm[m]; seen = np.minimum(d_.content_tokens, CONTENT)
+    print(f"  {lab:<28}{(d_.content_tokens>CONTENT).mean()*100:>10.1f}%"
+          f"{seen.sum()/d_.content_tokens.sum()*100:>12.1f}%{np.median(seen/d_.content_tokens)*100:>13.1f}%")
+p = (sm.content_tokens > CONTENT).mean()
 print(f"  headline {p*100:.1f}% +/- {1.96*np.sqrt(p*(1-p)/N)*100:.2f} pp "
       f"(95% CI, binomial; clustered sampling so treat as a floor on the interval)")
 
@@ -154,7 +156,7 @@ print("\nBY DUMP")
 a = df.assign(kept=kept, rin=kr).groupby("dump").agg(
     docs=("score", "size"), med=("score", "median"),
     rounded_in_pct=("rin", lambda x: x.mean()*100))
-b = sm.assign(tr=sm.bert_tokens > CONTENT).groupby("dump").agg(
+b = sm.assign(tr=sm.content_tokens > CONTENT).groupby("dump").agg(
     n_tok=("tr", "size"), trunc_pct=("tr", lambda x: x.mean()*100))
 out = a.join(b)
 print(out.to_string(float_format=lambda x: f"{x:.1f}"))
