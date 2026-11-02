@@ -157,7 +157,7 @@
 <div class="wrap">
   <div class="header-bar">
     <div>
-      <p style="margin:0 0 10px;font-size:13px"><a href="https://nmairesearch.github.io/" style="color:var(--accent);text-decoration:none">&larr; NM AI Research · research portfolio</a></p>
+      <p style="margin:0 0 10px;font-size:13px"><a href="https://nmairesearch.github.io/" style="color:var(--accent);text-decoration:none">&larr; NMAI Research · research portfolio</a></p>
       <h1>The FineWeb-Edu Threshold Explorer</h1>
       <p class="sub">The dataset card says to keep documents scoring 3 or more. That number is a rounded integer, the rounding is half-to-even, and the score it rounds was produced in bfloat16 on at most 510 tokens of text. Move the cut and watch what that costs.</p>
     </div>
@@ -166,7 +166,7 @@
       <span id="themeLabel">THEME: LIGHT</span>
     </button>
   </div>
-  <p class="stamp">Corrected content-token measurements over the frozen audit dataset: 84,005,795 documents, 94 Common Crawl snapshots, 233 distinct score values &middot; paper: <a href="https://doi.org/10.5281/zenodo.21740081" target="_blank" rel="noopener">DOI 10.5281/zenodo.21740081</a> &middot; <a href="https://github.com/NMAIResearch/fineweb-edu-threshold" target="_blank" rel="noopener">code &amp; data</a> &middot; NM AI Research, ORCID <a href="https://orcid.org/0009-0003-4213-7769" target="_blank" rel="noopener">0009-0003-4213-7769</a> &middot; CC BY 4.0</p>
+  <p class="stamp">Corrected content-token measurements over the frozen audit dataset: 84,005,795 documents, 94 Common Crawl snapshots, 233 distinct score values &middot; paper: <a href="https://doi.org/10.5281/zenodo.21740081" target="_blank" rel="noopener">DOI 10.5281/zenodo.21740081</a> &middot; <a href="https://github.com/NMAIResearch/fineweb-edu-threshold" target="_blank" rel="noopener">code &amp; data</a> &middot; NMAI Research, ORCID <a href="https://orcid.org/0009-0003-4213-7769" target="_blank" rel="noopener">0009-0003-4213-7769</a> &middot; CC BY 4.0</p>
 
   <p class="spotlight"><b>Correction notice.</b> The truncation series below excludes the CLS and SEP special tokens. The linked DOI and PDF remain the historical release. The separate fixed-score extension is retained in the repository as historical data and is unavailable here pending a raw-text recalculation. See <a href="CORRECTIONS.md">correction details</a>.</p>
 
@@ -269,7 +269,7 @@
     <p><b>Guardrails.</b> <code>fineweb-edu-score-2</code> retains <code>int_score &gt;= 2</code> only, so the grid starts at a raw 1.5 and nothing here speaks to documents below it; the 975,821 documents at exactly 1.5 are a floor, not a full count. Retention percentages on this page are shares of that already-filtered population, not of raw Common Crawl. Truncation uses 188,000 sampled documents, 2,000 per snapshot, clustered within selected shards. No population confidence interval is claimed. The historical fixed-score series used capped, first-eligible document pools; fixing the score does not remove all composition or selection effects. Its correction is pending and it is not plotted.</p>
     <p><b>What this does not claim.</b> No downstream model was trained or evaluated here, so nothing on this page says the corpus is worse for any of it. The finding is that a filter described in one line makes three decisions the line does not mention, and rounding admits most of the retained documents in this sample, as quantified above.</p>
     <p><b>Disclosure.</b> No third party reviewed, funded or directed this work. Claude, made by Anthropic, assisted the original analysis. OpenAI GPT-6 assisted the correction. Both providers compete with model providers discussed in the research. Model assistance does not constitute independent acceptance.</p>
-    <p><b>Reproducibility.</b> The embedded tables are regenerated from <code>full_scores.parquet</code> and the analysis outputs by <code>build_tool.py</code>. The full pipeline, the pinned shard manifest and the write-up are in the <a href="https://doi.org/10.5281/zenodo.21740081" target="_blank" rel="noopener">Zenodo record</a> and the <a href="https://github.com/NMAIResearch/fineweb-edu-threshold" target="_blank" rel="noopener">GitHub repository</a>. Change the data, run the build, the page moves. &nbsp;&middot;&nbsp; <a href="https://nmairesearch.github.io/">More from NM AI Research</a></p>
+    <p><b>Reproducibility.</b> The embedded tables are regenerated from <code>full_scores.parquet</code> and the analysis outputs by <code>build_tool.py</code>. The full pipeline, the pinned shard manifest and the write-up are in the <a href="https://doi.org/10.5281/zenodo.21740081" target="_blank" rel="noopener">Zenodo record</a> and the <a href="https://github.com/NMAIResearch/fineweb-edu-threshold" target="_blank" rel="noopener">GitHub repository</a>. Change the data, run the build, the page moves. &nbsp;&middot;&nbsp; <a href="https://nmairesearch.github.io/">More from NMAI Research</a></p>
   </div>
 </div>
 

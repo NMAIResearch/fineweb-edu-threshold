@@ -21,17 +21,17 @@ documents and 94 Common Crawl snapshots.
 **Interactive tool:** [Threshold Explorer](https://nmairesearch.github.io/fineweb-edu-threshold/)
 
 The manuscript candidate is `article_draft_v2.md`. A corrected PDF has not been produced. This
-bundle provides frozen intermediates and separate analysis scripts. Their verification coverage is described below.
+bundle provides separate analysis scripts; the frozen intermediates are in [Zenodo record 21751942](https://zenodo.org/records/21751942) (version 1.1), and the files named below that this dataset does not hold are in the [GitHub repository](https://github.com/NMAIResearch/fineweb-edu-threshold). Their verification coverage is described below.
 
 ## The tool
 
-The explorer uses the corrected content-only series. The fixed-score panel is unavailable pending recalculation; `redteam_check_a.csv` is preserved as historical evidence. See [CORRECTIONS.md](CORRECTIONS.md).
+The explorer uses the corrected content-only series. The fixed-score panel is unavailable pending recalculation; [`redteam_check_a.csv`](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/redteam_check_a.csv) is preserved as historical evidence. See [CORRECTIONS.md](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/CORRECTIONS.md).
 
-`index.html` is a threshold explorer over the frozen data: move the raw admission cut
+[`index.html`](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/index.html) is a threshold explorer over the frozen data: move the raw admission cut
 across the 233 observed score values in the sample, switch the rounding rule to watch the 458,461-document
 tie cohort at 2.5 appear and disappear, and read the truncation trend across the crawl
 series. It is one self-contained file with the data embedded, no dependencies and no
-network calls, so it works from `file://` as well as from Pages. `build_tool.py`
+network calls, so it works from `file://` as well as from Pages. [`build_tool.py`](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/build_tool.py)
 regenerates the score grid and embeds the corrected per-snapshot series and canonical content metrics:
 
 ```
@@ -46,14 +46,14 @@ Among the 40,431 retained documents in the 188,000-document tokenisation sample,
 
 ## Reproduce the bounded frozen checks
 
-verify_frozen.py checks the named score-distribution, rounding, tie-count and tokenisation-summary figures against the frozen intermediate files. It does not verify the original shard-to-intermediate transformation, the upstream classifier documentation, the content-classification AUCs or the separate fixed-score trend extension. download_random.py retrieves the manifest-listed shards; analyse_full.py, marginal_test.py and redteam_checks.py perform the corresponding analyses. A complete reproduction must distinguish these steps.
+[verify_frozen.py](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/verify_frozen.py) checks the named score-distribution, rounding, tie-count and tokenisation-summary figures against the frozen intermediate files, `full_scores.parquet` and `full_tokenised_sample.parquet` from [Zenodo record 21751942](https://zenodo.org/records/21751942). It does not verify the original shard-to-intermediate transformation, the upstream classifier documentation, the content-classification AUCs or the separate fixed-score trend extension. download_random.py retrieves the manifest-listed shards; analyse_full.py, marginal_test.py and redteam_checks.py perform the corresponding analyses. A complete reproduction must distinguish these steps. Run the two commands below in a clone of the [GitHub repository](https://github.com/NMAIResearch/fineweb-edu-threshold), with the two intermediates beside them; [recompute_content_metrics.py](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/recompute_content_metrics.py) writes [`content_metrics.json`](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/content_metrics.json) and [`corrected_by_dump.csv`](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/corrected_by_dump.csv), which the repository also holds.
 
 ```
 python recompute_content_metrics.py  # content_metrics.json and corrected_by_dump.csv
 python verify_frozen.py             # named checks only; exits non-zero on mismatch
 ```
 
-That takes about a minute and needs no downloads. What it does not cover is the
+That takes about a minute and needs no other download. What it does not cover is the
 read from the raw shards into those two files, the sampling and tokenisation step.
 For that, the full path:
 
@@ -65,7 +65,7 @@ python redteam_checks.py       # the fixed-score truncation trend to 2025 and th
 ```
 
 `random_shard_manifest.json` pins the exact shards (seed 20260801, written before
-download so the selection cannot have followed the results). `by_dump.csv` preserves the historical aggregate output; `corrected_by_dump.csv` supplies current truncation figures. `redteam_check_a.csv` is the uncorrected historical fixed-score extension, and `score_grid.csv` the whole 84-million-document score
+download so the selection cannot have followed the results). `by_dump.csv` preserves the historical aggregate output; [`corrected_by_dump.csv`](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/corrected_by_dump.csv) supplies current truncation figures. [`redteam_check_a.csv`](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/redteam_check_a.csv) is the uncorrected historical fixed-score extension, and [`score_grid.csv`](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/score_grid.csv) the whole 84-million-document score
 distribution collapsed onto the 233 distinct values observed in this sample.
 
 The quantisation result needs none of the downloads. Read [`classification/run_edu_bert.py`](https://github.com/huggingface/cosmopedia/blob/main/classification/run_edu_bert.py) in Hugging Face’s Cosmopedia repository, then run one line of NumPy against any
@@ -106,7 +106,7 @@ The research question, method, sourcing decisions and analytical judgements are
 the author's. The assisting model is not always a neutral party to the subject
 matter.
 
-OpenAI GPT-6 assisted this correction. OpenAI competes with model providers discussed in the analysis. Verification scope and the historical publication boundary are stated in CORRECTIONS.md.
+OpenAI GPT-6 assisted this correction. OpenAI competes with model providers discussed in the analysis. Verification scope and the historical publication boundary are stated in [CORRECTIONS.md](https://github.com/NMAIResearch/fineweb-edu-threshold/blob/main/CORRECTIONS.md).
 
 ## Licence
 

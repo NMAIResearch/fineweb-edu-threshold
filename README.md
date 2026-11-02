@@ -10,7 +10,7 @@ documents and 94 Common Crawl snapshots.
 **Interactive tool:** [Threshold Explorer](https://nmairesearch.github.io/fineweb-edu-threshold/)
 
 The manuscript candidate is `article_draft_v2.md`. A corrected PDF has not been produced. This
-bundle provides frozen intermediates and separate analysis scripts. Their verification coverage is described below.
+bundle provides separate analysis scripts; the frozen intermediates are in [Zenodo record 21751942](https://zenodo.org/records/21751942) (version 1.1). Their verification coverage is described below.
 
 ## The tool
 
@@ -35,14 +35,14 @@ Among the 40,431 retained documents in the 188,000-document tokenisation sample,
 
 ## Reproduce the bounded frozen checks
 
-verify_frozen.py checks the named score-distribution, rounding, tie-count and tokenisation-summary figures against the frozen intermediate files. It does not verify the original shard-to-intermediate transformation, the upstream classifier documentation, the content-classification AUCs or the separate fixed-score trend extension. download_random.py retrieves the manifest-listed shards; analyse_full.py, marginal_test.py and redteam_checks.py perform the corresponding analyses. A complete reproduction must distinguish these steps.
+verify_frozen.py checks the named score-distribution, rounding, tie-count and tokenisation-summary figures against the frozen intermediate files, `full_scores.parquet` and `full_tokenised_sample.parquet` from [Zenodo record 21751942](https://zenodo.org/records/21751942). It does not verify the original shard-to-intermediate transformation, the upstream classifier documentation, the content-classification AUCs or the separate fixed-score trend extension. download_random.py retrieves the manifest-listed shards; analyse_full.py, marginal_test.py and redteam_checks.py perform the corresponding analyses. A complete reproduction must distinguish these steps. Run the two commands below in a clone of this repository, with the two intermediates beside the scripts; `recompute_content_metrics.py` writes `content_metrics.json` and `corrected_by_dump.csv`, which the repository also holds.
 
 ```
 python recompute_content_metrics.py  # content_metrics.json and corrected_by_dump.csv
 python verify_frozen.py             # named checks only; exits non-zero on mismatch
 ```
 
-That takes about a minute and needs no downloads. What it does not cover is the
+That takes about a minute and needs no other download. What it does not cover is the
 read from the raw shards into those two files, the sampling and tokenisation step.
 For that, the full path:
 
