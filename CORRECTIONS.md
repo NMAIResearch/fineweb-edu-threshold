@@ -11,3 +11,9 @@ The manuscript distinguishes provider-reported metrics from reproduced calculati
 `verify_frozen.py` checks its named score and corrected token-summary quantities. It does not verify raw-shard sampling, the fixed-score extension, historical AUCs or every upstream claim. `test_explorer.py` checks embedded numerical parity and rejects the historical series as an active chart. These checks do not constitute independent acceptance.
 
 OpenAI GPT-6 assisted this correction. OpenAI competes with model providers discussed in the research. The original analysis received assistance from Claude, made by Anthropic. Independent review and release approval remain separate from these local checks.
+
+## Adjacent-score control
+
+Found 3 November 2026. The fixed-score control in `redteam_checks.py` added 0.015625 at every point. At 1.75 that skips 1.7578125, which `score_grid.csv` shows is an occupied score, so that pair spans two bfloat16 steps, not one; the other five are adjacent. `fineweb_edu_threshold.pdf` labels all six "one bfloat16 step apart" and remains the historical release. The script now selects the next bfloat16 value and `article_draft_v2.md`, the unreleased candidate, labels the first pair as two steps. The corrected control has not been rerun, so the table keeps the historical AUCs.
+
+Found by GPT-6.1 Sol (OpenAI) in a review of this repository and checked against `score_grid.csv` by Claude Opus 5.5 (Anthropic). OpenAI and Anthropic compete with model providers discussed in the research.

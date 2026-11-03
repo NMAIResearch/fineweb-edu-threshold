@@ -57,8 +57,10 @@ print(a.groupby("year").agg(dumps=("dump", "size"), trunc=("trunc_pct", "mean"),
                             med=("median_tok", "mean")).to_string(float_format=lambda x: f"{x:.1f}"))
 
 # ---------------- CHECK B ----------------------------------------------------
-STEP, CAP = np.float32(0.015625), 8000
+CAP = 8000
 POINTS = [np.float32(v) for v in (1.75, 2.0, 2.25, 2.5, 2.75, 3.0)]
+# bfloat16 has eight significand bits, including the leading bit.
+UPPER = {v: np.float32(v + 2.0 ** (np.frexp(v)[1] - 8)) for v in POINTS}
 print(f"\n\nCHECK B: same one-step AUC test at {len(POINTS)} grid points, {CAP:,}/group\n", flush=True)
 clean = [d for d in sorted(man) if man[d]["shard"].startswith("train-")]
 need = {v: {"lo": [], "hi": []} for v in POINTS}
@@ -67,7 +69,7 @@ for dump in [clean[i] for i in np.linspace(0, len(clean) - 1, 20).astype(int)]:
     for b in pf.iter_batches(batch_size=20000, columns=["text", "score"]):
         d = b.to_pydict(); s = np.array(d["score"], dtype=np.float32)
         for v in POINTS:
-            for key, mask in (("lo", s == v), ("hi", s == np.float32(v + STEP))):
+            for key, mask in (("lo", s == v), ("hi", s == UPPER[v])):
                 q = need[v][key]
                 if len(q) < CAP:
                     for i in np.flatnonzero(mask)[: CAP - len(q)]:
@@ -89,7 +91,7 @@ for v in POINTS:
     sc = cross_val_score(pipe, X, y, cv=StratifiedKFold(5, shuffle=True, random_state=SEED),
                          scoring="roc_auc", n_jobs=5)
     flag = "  <-- the admission boundary" if float(v) == 2.5 else ""
-    print(f"  {float(v):.6f} vs {float(v)+0.015625:.6f}{n:>9,}{sc.mean():>9.4f}{flag}", flush=True)
+    print(f"  {float(v):.6f} vs {float(UPPER[v]):.7f}{n:>9,}{sc.mean():>9.4f}{flag}", flush=True)
     out.append({"point": float(v), "n": n, "auc": sc.mean(), "sd": sc.std()})
 pd.DataFrame(out).to_csv("redteam_check_b.csv", index=False)
 print("\nwrote redteam_check_a.csv, redteam_check_b.csv")

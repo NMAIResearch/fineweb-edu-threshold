@@ -183,18 +183,18 @@ The stored boundary result is 0.5054 against a shuffled-label result of 0.4982, 
 It would be easy to over-read that. One objection to that reading is that for any
 continuous score thresholded anywhere, two points one step apart will look alike, so an AUC near
 0.5 at the boundary may say nothing about this filter in particular. That is correct, and it is
-testable, so here is the same comparison run at six points on the grid:
+testable. The historical comparison used six pairs on the grid. Five are adjacent; the first spans two bfloat16 steps, skipping the occupied score 1.7578125. The corrected control selects 1.750000 against 1.7578125, but its AUC has not been rerun. The table retains the historical pairs and AUCs:
 
-| Pair, one bfloat16 step apart | AUC |
+| Historical score pair | AUC |
 |---|---|
-| 1.750000 against 1.765625 | 0.4996 |
+| 1.750000 against 1.765625 (two steps) | 0.4996 |
 | 2.000000 against 2.015625 | 0.4911 |
 | 2.250000 against 2.265625 | 0.4994 |
 | 2.500000 against 2.515625, the admission boundary | 0.5068 |
 | 2.750000 against 2.765625 | 0.5011 |
 | 3.000000 against 3.015625 | 0.5022 |
 
-The six tested adjacent-score pairs gave AUCs near the chance baseline with the specified features and model. The admission-boundary pair was not distinctive within that comparison. This does not establish the absence of signal elsewhere on the score range, the educational equivalence of the groups or the absence of particular document types at the tie point. The result remains conditional on the tested method and sampling procedure.
+The six historical score-pair comparisons gave AUCs near the chance baseline with the specified features and model. The admission-boundary pair was not distinctive within that comparison. This does not establish the absence of signal elsewhere on the score range, the educational equivalence of the groups or the absence of particular document types at the tie point. The result remains conditional on the tested method and sampling procedure.
 
 The row that carries real weight is the fourth: the band kept only by rounding is distinguishable
 from the band above the nominal threshold, at an AUC of 0.767.
